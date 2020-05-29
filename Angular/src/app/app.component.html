@@ -1,0 +1,63 @@
+<dx-popup #popup
+    [(title)]="popupTitle"
+    [closeOnOutsideClick]="true"
+    [(visible)]="popupVisible">
+    <dxi-toolbar-item 
+        widget="dxButton"
+        location="after"
+        toolbar="bottom"
+        [options]="{ text: 'Confirm', type: 'success',
+            onClick: confirmClick }"></dxi-toolbar-item>
+    <dxi-toolbar-item 
+        widget="dxButton"
+        location="after"
+        toolbar="bottom"
+        [options]="{ text: 'Cancel',
+            onClick: cancelClick }"></dxi-toolbar-item>
+            
+
+    <div *dxTemplate="let data of 'content'">
+        <dx-form #form
+            [(formData)]="formData"
+            labelLocation="top"
+            [showColonAfterLabel]="true"
+            [colCountByScreen]="{ 
+                lg: 2, md: 2, sm: 1, xs: 1
+            }">
+            <dxi-item dataField="ID">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="CompanyName">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Zipcode">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Website">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-item>
+        </dx-form>
+    </div>
+</dx-popup>
+
+<dx-data-grid #grid
+    [dataSource]="source"
+    keyExpr="ID"
+    (onToolbarPreparing)="onToolbarPreparing($event)">
+    <dxo-editing
+        [allowUpdating]="true"
+        [allowAdding]="true"
+        [allowDeleting]="true"
+        [useIcons]="true"
+        mode="popup">
+    </dxo-editing>
+    
+    <dxi-column dataField="ID"></dxi-column>
+    <dxi-column dataField="CompanyName"></dxi-column>
+    <dxi-column dataField="Zipcode"></dxi-column>
+    <dxi-column dataField="Website"></dxi-column>
+    <dxi-column type="buttons">
+        <dxi-button name="edit" [onClick]="editClick"></dxi-button>
+        <dxi-button name="delete"></dxi-button>
+    </dxi-column>
+</dx-data-grid>
