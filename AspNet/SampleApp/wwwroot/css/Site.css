@@ -1,0 +1,171 @@
+body, html {
+    margin: 0;
+    min-height: 100%;
+    height: 100%;
+}
+
+#app-side-nav-outer-toolbar {
+    flex-direction: column;
+    display: flex; 
+    height: 100%;
+    width: 100%;
+}
+
+.layout-header {
+    flex: 0 0 auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    position: relative;
+    z-index: 1501;
+}
+
+.dx-toolbar .dx-toolbar-item.menu-button {
+    width: 60px;
+    text-align: center;
+    padding: 0;
+}
+
+.dx-toolbar .dx-toolbar-item.menu-button > .dx-toolbar-item-content .dx-icon {
+    color: #ff5722;
+}
+
+.dx-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+    border-radius: 4px;
+    background-color: #fff;
+    margin: 2px 2px 3px;
+}
+
+.dx-card.wide-card {
+    border-radius: 0;
+    margin-left: 0;
+    margin-right: 0;
+    border-right: 0;
+    border-left: 0;
+}
+
+.with-footer > div > div > .dx-scrollable-content {
+    height: 100%;
+}
+
+.with-footer > div > div > .dx-scrollable-content > .dx-scrollview-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.layout-body {
+    background-color: #f2f2f2;
+    flex: 1;
+    height: 100%;
+    min-height: 0;
+}
+
+.layout-body .menu-container {
+    height: 100%;
+    width: 250px;
+}
+
+.layout-body .content {
+    flex-grow: 1;
+    height: 100%;
+    line-height: 1.5;
+}
+
+.layout-body .content h2 {
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: -.5px;
+}
+
+.layout-body .content-block {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.layout-body .content-footer {
+    display: block;
+    color: rgba(0,0,0,.609);
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding-top: 20px;
+    padding-bottom: 24px;
+}
+
+.layout-body .responsive-paddings {
+    padding: 20px;
+}
+
+.layout-body-hidden {
+    visibility: hidden;
+}
+
+@media screen and (min-width: 600px) {
+    .layout-body .content-block {
+        margin-left: 40px;
+        margin-right: 40px;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .layout-body .responsive-paddings {
+        padding: 40px;
+    }
+}
+
+.menu-container .dx-widget {
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: Roboto,RobotoFallback,Helvetica,Arial,sans-serif;
+    line-height: 24px;
+}
+
+.menu-container .dx-treeview {
+    white-space: nowrap;
+}
+
+.menu-container .dx-treeview .dx-treeview-item {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.menu-container .dx-treeview .dx-treeview-item .dx-icon {
+    width: 60px !important;
+    margin: 0 !important;
+}
+
+.menu-container .dx-treeview .dx-treeview-node {
+    padding: 0 0 !important;
+}
+
+.menu-container .dx-treeview .dx-treeview-toggle-item-visibility {
+    right: 10px;
+    left: auto;
+}
+
+.menu-container .dx-treeview .dx-rtl .dx-treeview-toggle-item-visibility {
+    left: 10px;
+    right: auto;
+}
+
+.menu-container .dx-treeview .dx-treeview-node[aria-level="1"] {
+    font-weight: bold;
+    border-bottom: 1px solid #515159;
+}
+
+.menu-container .dx-treeview .dx-treeview-node[aria-level="2"] .dx-treeview-item-content {
+    font-weight: normal;
+    padding: 0 60px;
+}
+
+.menu-container .dx-treeview .dx-treeview-node-container .dx-treeview-node.dx-state-selected:not(.dx-state-focused) > .dx-treeview-item {
+    background: transparent;
+}
+
+.menu-container .dx-treeview .dx-treeview-node-container .dx-treeview-node.dx-state-selected > .dx-treeview-item * {
+    color: #FF5722;
+}
+
+.menu-container .dx-treeview .dx-treeview-node-container .dx-treeview-node:not(.dx-state-focused) > .dx-treeview-item.dx-state-hover {
+    background-color: #3F3F4B;
+}
