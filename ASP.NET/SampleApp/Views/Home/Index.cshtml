@@ -108,13 +108,11 @@
         "Website": "http://www.nowebsitemusic.com"
     }];
 
-    let key = "ID";
-    let rowData = {};
-    let mode = "";
+    let key = "ID",
+        rowData = {},
+        mode;
 
-    let popup = undefined;
-    let grid = undefined;
-    let form = undefined;
+    let popup, grid, form;
 
     function onDataGridInitialized(e) {
         grid = e.component;
@@ -148,32 +146,20 @@
     }
 
     function onConfirmClick() {
-        // get form instance by querying for Form
+        let result = form.validate();
+        if (result.isValid) {
+            let data = form.option("formData"),
+                gridSource = grid.getDataSource();
 
-        if (mode === "Edit") {
-            let result = form.validate();
-            if (result.isValid) {
-                let data = form.option("formData");
-
-                let gridSource = grid.getDataSource();
+            if (mode === "Add")
+                gridSource.store()
+                    .push([{ type: "insert", data: data }]);
+            else if (mode === "Edit") 
                 gridSource.store()
                     .push([{ type: "update", data: data, key: data[key] }]);
-                gridSource.reload();
-
-                popup.hide();
-            }
-        } else if (mode === "Add") {
-            let result = form.validate();
-            if (result.isValid) {
-                let data = form.option("formData");
-
-                let gridSource = grid.getDataSource();
-                gridSource.store()
-                    .push([{type: "insert", data: data}]);
-                gridSource.reload();
-
-                popup.hide();
-            }
+            
+            gridSource.reload();
+            popup.hide();
         }
     }
 
