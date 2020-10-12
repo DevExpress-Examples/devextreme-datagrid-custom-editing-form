@@ -34,18 +34,18 @@
 @(Html.DevExtreme().Popup()
     .ID("popup")
     .ContentTemplate(new TemplateName("customPopupContentTemplate"))
-    .ToolbarItems(i =>
+    .ToolbarItems(items =>
     {
-        i.Add()
-            .Widget(i => i.Button()
+        items.Add()
+            .Widget(editor => editor.Button()
                 .Text("Confirm")
                 .Type(ButtonType.Success)
                 .OnClick("onConfirmClick")
             )
             .Location(ToolbarItemLocation.After)
             .Toolbar(Toolbar.Bottom);
-        i.Add()
-            .Widget(i => i.Button()
+        items.Add()
+            .Widget(editor => editor.Button()
                 .Text("Cancel")
                 .Type(ButtonType.Success)
                 .OnClick("onCancelClick")
