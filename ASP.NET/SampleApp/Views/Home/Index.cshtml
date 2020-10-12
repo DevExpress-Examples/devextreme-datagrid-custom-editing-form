@@ -183,13 +183,15 @@
 
     function showPopup(popupMode, data) {
         mode = popupMode;
-        popup.option("title", popupMode);
 
         if (form)
             form.option('formData', { ...data })
         else 
             rowData = { ...data };
 
-        popup.show();
+        popup.option({
+            title: popupMode,
+            visible: true
+        })
     }
 </script>
