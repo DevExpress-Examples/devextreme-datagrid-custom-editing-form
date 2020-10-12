@@ -130,11 +130,12 @@
         let toolbarItems = e.toolbarOptions.items;
 
         // customize addRow toolbar button
-        toolbarItems.forEach((item) => {
+        for (let i = 0; i < toolbarItems.length; i++) {
             if (item.name === "addRowButton") {
-                item.options.onClick = onClickAdd
+                item.options.onClick = onClickAdd;
+                break;
             }
-        });
+        }
     }
 
     function onClickEdit(e) {
