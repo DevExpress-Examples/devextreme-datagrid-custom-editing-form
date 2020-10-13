@@ -1,5 +1,27 @@
+<dx-data-grid #grid
+    [dataSource]="gridSource"
+    [keyExpr]="key"
+    (onToolbarPreparing)="onToolbarPreparing($event)">
+    <dxo-editing
+        [allowUpdating]="true"
+        [allowAdding]="true"
+        [allowDeleting]="true"
+        [useIcons]="true"
+        mode="popup">
+    </dxo-editing>
+    
+    <dxi-column dataField="ID" dataType="number"></dxi-column>
+    <dxi-column dataField="CompanyName" dataType="string"></dxi-column>
+    <dxi-column dataField="Zipcode" dataType="number"></dxi-column>
+    <dxi-column dataField="Website" dataType="string"></dxi-column>
+    <dxi-column type="buttons">
+        <dxi-button name="edit" [onClick]="editClick"></dxi-button>
+        <dxi-button name="delete"></dxi-button>
+    </dxi-column>
+</dx-data-grid>
+
 <dx-popup #popup
-    [(title)]="popupTitle"
+    [(title)]="popupMode"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
     <dxi-toolbar-item 
@@ -40,24 +62,3 @@
     </div>
 </dx-popup>
 
-<dx-data-grid #grid
-    [dataSource]="source"
-    keyExpr="ID"
-    (onToolbarPreparing)="onToolbarPreparing($event)">
-    <dxo-editing
-        [allowUpdating]="true"
-        [allowAdding]="true"
-        [allowDeleting]="true"
-        [useIcons]="true"
-        mode="popup">
-    </dxo-editing>
-    
-    <dxi-column dataField="ID"></dxi-column>
-    <dxi-column dataField="CompanyName"></dxi-column>
-    <dxi-column dataField="Zipcode"></dxi-column>
-    <dxi-column dataField="Website"></dxi-column>
-    <dxi-column type="buttons">
-        <dxi-button name="edit" [onClick]="editClick"></dxi-button>
-        <dxi-button name="delete"></dxi-button>
-    </dxi-column>
-</dx-data-grid>
