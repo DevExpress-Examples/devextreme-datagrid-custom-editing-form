@@ -22,128 +22,93 @@ $(function () {
             for (let i = 0; i < toolbarItems.length; i++) {
                 let item = toolbarItems[i];
                 if (item.name === "addRowButton") {
-                    item.options.onClick = onClickAdd;
+                    item.options.onClick = function(e) {
+                        showPopup("Add", undefined)
+                    };
                     break;
                 }
             }
         },
         columns: ["ID", "CompanyName", "Zipcode", "Website", {
             type: "buttons",
-
-            // create edit and delete buttons
             buttons: [{
                 name: "edit",
                 onClick: function (e) {
-                    showPopup("edit", e.row.data)
+                    showPopup("Edit", e.row.data)
                 }
             }, "delete"]
 
         }]
     }).dxDataGrid("instance");
 
-    function showPopup(popupMode, data) {
-        if (!popup) {
-            popup = createPopUp(popupMode);
-        }
+    popup = $("#popup").dxPopup({
+        contentTemplate: popupTemplate,
+        closeOnOutsideClick: true,
+        toolbarItems: [{
+            widget: "dxButton",
+            location: "after",
+            toolbar: "bottom",
+            options: {
+                text: "Confirm",
+                type: "success",
+                onClick: function (x) {
+                    let result = form.validate();
+                    if (result.isValid) {
+                        let data = form.option("formData"),
+                            gridSource = grid.getDataSource(),
+                            gridStore = gridSource.store();
 
-        mode = popupMode;
+                        if (mode === "Add")
+                            gridStore.push([{ type: "insert", data: data }]);
+                        else if (mode === "Edit")
+                            gridStore.push([{ type: "update", data: data, key: data[key] }]);
 
-        // popup only updates necessary options
-        if (popupMode === "add") {
-            popup.option({
-                title: "Add",
-                contentTemplate: function(e) { popupTemplate(e); }
-            });
-
-            rowData = undefined;
-            
-            popup.show();
-        } else if (popupMode === "edit") {
-            popup.option({
-                title: "Edit",
-                contentTemplate: function(e) { popupTemplate(e); }
-            });
-
-            rowData = data;
-            
-            popup.show();
-        }
-    }
-
-    // create popup instance
-    function createPopUp(popupMode) {
-        let popupInstance = $("#popup").dxPopup({
-            title: popupMode === "edit" ? "Edit" : "Add",
-            closeOnOutsideClick: true,
-            contentTemplate: popupTemplate,
-            toolbarItems: [{
-                widget: "dxButton",
-                location: "after",
-                toolbar: "bottom",
-                options: {
-                    text: "Confirm",
-                    type: "success",
-                    onClick: function (x) {
-                        // get form instance by querying for Form
-                        let form = $("#form").dxForm("instance");
-
-                        if (mode === "edit") {
-                            let result = form.validate();
-                            if (result.isValid) {
-                                let data = form.option("formData");
-
-                                let gridSource = grid.getDataSource();
-                                gridSource.store().push([
-                                    {
-                                        type: "update",
-                                        data: data,
-                                        key: data[key]
-                                    }
-                                ]);
-                                gridSource.reload();
-
-                                popup.hide();
-                            }
-                        } else if (mode === "add") {
-                            let result = form.validate();
-                            if (result.isValid) {
-                                let data = form.option("formData");
-                            
-                                let gridSource = grid.getDataSource();
-                                gridSource.store().push([
-                                    {
-                                        type: "insert",
-                                        data: data
-                                    }
-                                ]);
-                                gridSource.reload();
-    
-                                popup.hide();
-                            }
-                        }
-                        
-                    }
-                }
-            }, {
-                widget: "dxButton",
-                location: "after",
-                toolbar: "bottom",
-                options: {
-                    text: "Cancel",
-                    toolbar: "bottom",
-                    onClick: function (x) {
+                        gridSource.reload();
                         popup.hide();
                     }
                 }
-            }]
-        }).dxPopup("instance");
-        return popupInstance;
+            }
+        }, {
+            widget: "dxButton",
+            location: "after",
+            toolbar: "bottom",
+            options: {
+                text: "Cancel",
+                toolbar: "bottom",
+                onClick: function () {
+                    popup.hide();
+                }
+            }
+        }]
+    }).dxPopup('instance')
+
+    function showPopup(popupMode, data) {
+        mode = popupMode;
+
+        if (form)
+            form.option('formData', { ...data })
+        else
+            rowData = { ...data };
+
+        popup.option({
+            title: popupMode,
+            visible: true
+        })
     }
 
-    // template for PopUp
     function popupTemplate(e) {
-        e.append(
-            $("<div />").attr("id", "form").dxForm(createForm(rowData, [{
+        let formElement = $("<div>")
+        form = formElement.dxForm({
+            formData: rowData,
+            labelLocation: "top",
+            showColonAfterLabel: true,
+            colCountByScreen: {
+                lg: 2,
+                md: 2,
+                sm: 1,
+                xs: 1
+            },
+            items: [{
                 dataField: "ID",
                 validationRules: [{
                     type: "required"
@@ -163,31 +128,10 @@ $(function () {
                 validationRules: [{
                     type: "required"
                 }]
-            }])
-            )
-        );
-    }
-
-    // returns Form options
-    // formData: any;
-    // formItems: form.items[]; required. if none is detected, it will autogenerate items
-    function createForm(formData, formItems) {
-        if (!formItems) {
-            DevExpress.ui.notify("createForm() requires 'formItems'", "warning", 5000);
-        }
-
-        return {
-            formData: formData || {},
-            labelLocation: "top",
-            showColonAfterLabel: true,
-            colCountByScreen: {
-                lg: 2,
-                md: 2,
-                sm: 1,
-                xs: 1
-            },
-            items: formItems
-        }
+            }]
+        }).dxForm('instance');
+        
+        e.append(formElement);
     }
 });
 

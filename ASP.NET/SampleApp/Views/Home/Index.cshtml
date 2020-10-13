@@ -151,14 +151,13 @@
         let result = form.validate();
         if (result.isValid) {
             let data = form.option("formData"),
-                gridSource = grid.getDataSource();
+                gridSource = grid.getDataSource(),
+                gridStore = gridSource.store();
 
             if (mode === "Add")
-                gridSource.store()
-                    .push([{ type: "insert", data: data }]);
+                gridStore.push([{ type: "insert", data: data }]);
             else if (mode === "Edit")
-                gridSource.store()
-                    .push([{ type: "update", data: data, key: data[key] }]);
+                gridStore.push([{ type: "update", data: data, key: data[key] }]);
 
             gridSource.reload();
             popup.hide();
