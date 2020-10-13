@@ -20,13 +20,13 @@
         columns.Add().DataField("Website");
         columns.Add()
             .Type(GridCommandColumnType.Buttons)
-            .Buttons(b =>
+            .Buttons(btn =>
             {
-                b.Add()
+                btn.Add()
                     .Name("edit")
                     .OnClick("onClickEdit");
 
-                b.Add().Name("delete");
+                btn.Add().Name("delete");
             });
     })
     .OnInitialized("onDataGridInitialized")
