@@ -1,12 +1,12 @@
 $(function () {
-    var key = "ID";
-    var rowData = {};
-    var mode = "";
+    let key = "ID",
+        rowData = {},
+        mode,
     // popup instance
-    var popup = undefined;
+        popup = undefined;
 
     // datagrid
-    var grid = $("#grid").dxDataGrid({
+    let grid = $("#grid").dxDataGrid({
         dataSource: source,
         keyExpr: key,
         editing: {
@@ -196,7 +196,7 @@ $(function () {
     }
 });
 
-var source = [{
+let source = [{
     "ID": 1,
     "CompanyName": "Super Mart of the West",
     "Zipcode": 72716,
