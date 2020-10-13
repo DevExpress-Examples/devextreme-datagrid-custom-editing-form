@@ -68,21 +68,21 @@
             .Sm(1)
             .Xs(1)
         )
-        .Items(i =>
+        .Items(items =>
         {
-            i.AddSimple()
+            items.AddSimple()
                 .DataField("ID")
                 .ValidationRules(v => v.AddRequired());
 
-            i.AddSimple()
+            items.AddSimple()
                 .DataField("CompanyName")
                 .ValidationRules(v => v.AddRequired());
 
-            i.AddSimple()
+            items.AddSimple()
                 .DataField("Zipcode")
                 .ValidationRules(v => v.AddRequired());
 
-            i.AddSimple()
+            items.AddSimple()
                 .DataField("Website")
                 .ValidationRules(v => v.AddRequired());
         })
