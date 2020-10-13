@@ -1,12 +1,11 @@
 $(function () {
     let key = "ID",
         rowData = {},
-        mode,
-    // popup instance
-        popup = undefined;
+        mode;
+        
+    let popup, grid, form;
 
-    // datagrid
-    let grid = $("#grid").dxDataGrid({
+    grid = $("#grid").dxDataGrid({
         dataSource: source,
         keyExpr: key,
         editing: {
@@ -20,13 +19,13 @@ $(function () {
             let toolbarItems = e.toolbarOptions.items;
 
             // customize addRow toolbar button
-            toolbarItems.forEach((item) => {
+            for (let i = 0; i < toolbarItems.length; i++) {
+                let item = toolbarItems[i];
                 if (item.name === "addRowButton") {
-                    item.options.onClick = (x) => {
-                        showPopup("add");
-                    }
+                    item.options.onClick = onClickAdd;
+                    break;
                 }
-            });
+            }
         },
         columns: ["ID", "CompanyName", "Zipcode", "Website", {
             type: "buttons",
@@ -42,10 +41,6 @@ $(function () {
         }]
     }).dxDataGrid("instance");
 
-
-    // shows popup
-    // popupMode: string = "add" || "edit"
-    // data: any; used for Form's formdata
     function showPopup(popupMode, data) {
         if (!popup) {
             popup = createPopUp(popupMode);
