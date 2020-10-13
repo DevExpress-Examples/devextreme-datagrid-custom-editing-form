@@ -34,18 +34,18 @@
 @(Html.DevExtreme().Popup()
     .ID("popup")
     .ContentTemplate(new TemplateName("customPopupContentTemplate"))
-    .ToolbarItems(i =>
+    .ToolbarItems(items =>
     {
-        i.Add()
-            .Widget(i => i.Button()
+        items.Add()
+            .Widget(editor => editor.Button()
                 .Text("Confirm")
                 .Type(ButtonType.Success)
                 .OnClick("onConfirmClick")
             )
             .Location(ToolbarItemLocation.After)
             .Toolbar(Toolbar.Bottom);
-        i.Add()
-            .Widget(i => i.Button()
+        items.Add()
+            .Widget(editor => editor.Button()
                 .Text("Cancel")
                 .Type(ButtonType.Success)
                 .OnClick("onCancelClick")
@@ -108,13 +108,11 @@
         "Website": "http://www.nowebsitemusic.com"
     }];
 
-    let key = "ID";
-    let rowData = {};
-    let mode = "";
+    let key = "ID",
+        rowData = {},
+        mode;
 
-    let popup = undefined;
-    let grid = undefined;
-    let form = undefined;
+    let popup, grid, form;
 
     function onDataGridInitialized(e) {
         grid = e.component;
@@ -132,11 +130,13 @@
         let toolbarItems = e.toolbarOptions.items;
 
         // customize addRow toolbar button
-        toolbarItems.forEach((item) => {
+        for (let i = 0; i < toolbarItems.length; i++) {
+            let item = toolbarItems[i];
             if (item.name === "addRowButton") {
-                item.options.onClick = onClickAdd
+                item.options.onClick = onClickAdd;
+                break;
             }
-        });
+        }
     }
 
     function onClickEdit(e) {
@@ -148,32 +148,20 @@
     }
 
     function onConfirmClick() {
-        // get form instance by querying for Form
+        let result = form.validate();
+        if (result.isValid) {
+            let data = form.option("formData"),
+                gridSource = grid.getDataSource();
 
-        if (mode === "Edit") {
-            let result = form.validate();
-            if (result.isValid) {
-                let data = form.option("formData");
-
-                let gridSource = grid.getDataSource();
+            if (mode === "Add")
+                gridSource.store()
+                    .push([{ type: "insert", data: data }]);
+            else if (mode === "Edit")
                 gridSource.store()
                     .push([{ type: "update", data: data, key: data[key] }]);
-                gridSource.reload();
 
-                popup.hide();
-            }
-        } else if (mode === "Add") {
-            let result = form.validate();
-            if (result.isValid) {
-                let data = form.option("formData");
-
-                let gridSource = grid.getDataSource();
-                gridSource.store()
-                    .push([{type: "insert", data: data}]);
-                gridSource.reload();
-
-                popup.hide();
-            }
+            gridSource.reload();
+            popup.hide();
         }
     }
 
@@ -183,13 +171,15 @@
 
     function showPopup(popupMode, data) {
         mode = popupMode;
-        popup.option("title", popupMode);
 
         if (form)
             form.option('formData', { ...data })
-        else 
+        else
             rowData = { ...data };
 
-        popup.show();
+        popup.option({
+            title: popupMode,
+            visible: true
+        })
     }
 </script>
