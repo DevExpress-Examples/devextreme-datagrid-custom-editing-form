@@ -1,8 +1,7 @@
 $(function () {
-    let key = "ID",
-        rowData = {},
+    const key = "ID";
+    let rowData = {},
         mode;
-        
     let popup, grid, form;
 
     grid = $("#grid").dxDataGrid({
