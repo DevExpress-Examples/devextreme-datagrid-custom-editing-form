@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { DxDataGridComponent, DxPopupComponent, DxFormComponent } from 'devextreme-angular';
+import { DxFormComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store'
 import { Customer, Service } from './app.service';
@@ -11,11 +11,8 @@ import { Customer, Service } from './app.service';
   providers: [Service]
 })
 export class AppComponent {
-    @ViewChild("grid", {static: false}) grid: DxDataGridComponent;
-    @ViewChild("popup", {static: false}) popup: DxPopupComponent;
     @ViewChild("form", {static: false}) form: DxFormComponent;
     key: string = "ID";
-    mode: string = "";
     formData: any = {};
     popupMode: string = "Add";
     popupVisible: boolean = false;
@@ -67,9 +64,9 @@ export class AppComponent {
 
             if (this.popupMode === "Add")
                 gridStore.push([{ type: "insert", data: this.formData }]);
-            else if (this.popupMode === "Edit") {
+            else if (this.popupMode === "Edit") 
                 gridStore.push([{ type: "update", data: this.formData, key: this.formData[this.key]}]);
-            }
+            
 
             gridSource.reload();
             this.popupVisible = false;
