@@ -84,9 +84,9 @@ function App() {
         
           debugger;
         // setPopupVisible(false)
-        setGridSource(new DataSource({
-          store: customerStore
-        }))
+        // setGridSource(new DataSource({
+        //   store: customerStore
+        // }))
         gridSource.reload();
         
     }
