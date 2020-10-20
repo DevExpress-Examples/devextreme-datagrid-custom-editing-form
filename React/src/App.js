@@ -82,7 +82,6 @@ function App() {
       else if (popupMode === "Edit") 
         customerStore.push([{type: "update", data: formData, key: formData[key]}]);
 
-
       dispatchPopup({type: "hidePopup"})
       gridSource.reload();
     }
@@ -94,6 +93,10 @@ function App() {
 
   function showPopup(popupMode, data) {
     dispatchPopup({type: "initPopup", data, popupMode})
+  }
+
+  function onHiding() {
+    dispatchPopup({type: "hidePopup"});
   }
 
   return (
@@ -121,7 +124,8 @@ function App() {
       <Popup 
         title={popupMode}
         closeOnOutsideClick={true}
-        visible={popupVisible}>
+        visible={popupVisible}
+        onHiding={onHiding}>
           <ToolbarItem 
             widget="dxButton"
             location="after"
@@ -173,5 +177,7 @@ function popupReducer(state, action) {
       return {
         popupVisible: false
       }
+    default: 
+      break;
   }
 }
