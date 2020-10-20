@@ -22,7 +22,7 @@ $(function () {
                 let item = toolbarItems[i];
                 if (item.name === "addRowButton") {
                     item.options.onClick = function(e) {
-                        showPopup("Add", undefined)
+                        showPopup("Add", {})
                     };
                     break;
                 }
