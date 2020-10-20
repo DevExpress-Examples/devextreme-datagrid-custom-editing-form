@@ -51,7 +51,7 @@ export class AppComponent {
     }
 
     showPopup(popupMode, data) {
-        this.formData = data !== undefined ? data : {};
+        this.formData = data;
         this.popupMode = popupMode;
         this.popupVisible = true;
     }
@@ -83,5 +83,6 @@ export class AppComponent {
 
     cancelClick(e) {
         this.popupVisible = false;
+        this.form.instance.resetValues();
     }
 }
