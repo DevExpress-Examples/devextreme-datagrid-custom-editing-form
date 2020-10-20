@@ -1,4 +1,4 @@
-<dx-data-grid #grid
+<dx-data-grid 
     [dataSource]="gridSource"
     (onToolbarPreparing)="onToolbarPreparing($event)">
     <dxo-editing
@@ -19,7 +19,7 @@
     </dxi-column>
 </dx-data-grid>
 
-<dx-popup #popup
+<dx-popup
     [(title)]="popupMode"
     [closeOnOutsideClick]="true"
     [(visible)]="popupVisible">
@@ -27,16 +27,20 @@
         widget="dxButton"
         location="after"
         toolbar="bottom"
-        [options]="{ text: 'Confirm', type: 'success',
-            onClick: confirmClick }"></dxi-toolbar-item>
+        [options]="{ 
+            text: 'Confirm', 
+            type: 'success',
+            onClick: confirmClick 
+        }"></dxi-toolbar-item>
     <dxi-toolbar-item 
         widget="dxButton"
         location="after"
         toolbar="bottom"
-        [options]="{ text: 'Cancel',
-            onClick: cancelClick }"></dxi-toolbar-item>
+        [options]="{ 
+            text: 'Cancel',
+            onClick: cancelClick 
+        }"></dxi-toolbar-item>
             
-
     <div *dxTemplate="let data of 'content'">
         <dx-form #form
             [(formData)]="formData"
