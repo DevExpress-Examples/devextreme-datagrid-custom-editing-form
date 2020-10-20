@@ -1,6 +1,6 @@
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import './App.css';
 import { DataGrid, Editing, Column, Button } from 'devextreme-react/data-grid'
 import { Popup, ToolbarItem } from 'devextreme-react/popup'
@@ -13,13 +13,13 @@ import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store'
 
 const key = "ID";
-let customerStore = new ArrayStore({
-  data: customers,
-  key: key
-})
-
-// const gridSourceContext = React.createContext(gridSource)
-
+const customerStore = new ArrayStore({
+    data: customers,
+    key: key
+  }), 
+  gridSource = new DataSource({
+    store: customerStore
+  })
 const colCountByScreen = { 
   lg: 2, md: 2, sm: 1, xs: 1
 }
@@ -27,25 +27,25 @@ const formRef = React.createRef(),
   getForm = () => {
     return formRef.current.instance;
   }
+const initPopupState = {
+  formData: {},
+  popupVisible: false,
+  popupMode: ""
+}
+
 
 function App() {
-  // CHANGE TO DISPATCH
-  const [formData, setFormData] = useState({});
-  const [popupVisible, setPopupVisible] = useState(false);
-  const [popupMode, setPopupMode] = useState("");
-  const [gridSource, setGridSource] = useState(new DataSource({
-    store: customerStore
-  }))
-  // const gridSource = useContext(gridSourceContext);
-  // const gridSource = gridSource
-  
+  const [{formData, popupVisible, popupMode}, dispatchPopup] = useReducer(popupReducer, initPopupState)
+
   const confirmBtnOptions = useMemo(() => { 
+    console.log("updated confirmbtnOptions")
     return { 
       text: 'Confirm', 
       type: 'success',
       onClick: confirmClick 
     }
-  }, []);
+  }, [formData]);
+
   const cancelBtnOptions = useMemo(() => { 
     return { 
       text: 'Cancel', 
@@ -71,37 +71,29 @@ function App() {
   }
 
   function addClick(e) {
-    showPopup("Add", undefined);
+    showPopup("Add", {});
   }
 
   function confirmClick(e) {
     let result = getForm().validate();
     if (result.isValid) {
-        if (popupMode === "Add")
-          customerStore.push([{ type: "insert", data: formData }]);
-        else if (popupMode === "Edit") 
-          customerStore.push([{ type: "update", data: formData, key: formData[key]}]);
-        
-          debugger;
-        // setPopupVisible(false)
-        // setGridSource(new DataSource({
-        //   store: customerStore
-        // }))
-        gridSource.reload();
-        
+      if (popupMode === "Add")
+        customerStore.push([{ type: "insert", data: formData }]);
+      else if (popupMode === "Edit") 
+        customerStore.push([{type: "update", data: formData, key: formData[key]}]);
+
+
+      dispatchPopup({type: "hidePopup"})
+      gridSource.reload();
     }
   }
 
   function cancelClick(e) {
-    setPopupVisible(false)
+    dispatchPopup({type: "hidePopup"})
   }
 
-
   function showPopup(popupMode, data) {
-    // CHANGE TO DISPATCH
-    setFormData(data !== undefined ? data : {})
-    setPopupMode(popupMode);
-    setPopupVisible(true);
+    dispatchPopup({type: "initPopup", data, popupMode})
   }
 
   return (
@@ -168,3 +160,18 @@ function App() {
 }
 
 export default App;
+
+function popupReducer(state, action) {
+  switch(action.type) {
+    case "initPopup":
+      return {
+        formData: action.data,
+        popupVisible: true,
+        popupMode: action.popupMode
+      }
+    case "hidePopup":
+      return {
+        popupVisible: false
+      }
+  }
+}
