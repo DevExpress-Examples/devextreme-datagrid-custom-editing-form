@@ -121,12 +121,12 @@ export default {
       }
     },
     showPopup(popupMode, data) {
-      this.formData = data !== undefined ? data : {};
+      this.formData = data;
       this.popupMode = popupMode;
       this.popupVisible = true;
     },
     addClick() {
-      this.showPopup("Add", undefined);
+      this.showPopup("Add", {});
     },
     editClick(e) {
       this.showPopup("Edit", {...e.row.data});
