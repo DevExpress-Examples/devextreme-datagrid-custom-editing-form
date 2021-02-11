@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { DxDataGridModule, DxPopupModule, DxFormModule } from "devextreme-angular";
+import { DxDataGridModule } from "devextreme-angular/ui/data-grid";
+import { DxPopupModule } from "devextreme-angular/ui/popup";
+import { DxFormModule } from "devextreme-angular/ui/form";
 
 import { AppComponent } from './app.component';
 
