@@ -15,3 +15,4 @@ ASP.NET/SampleApp/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttri
 ASP.NET/.vs/SampleApp/v16/.suo
 ASP.NET/.vs/SampleApp/DesignTimeBuild/.dtbcache.v2
 ASP.NET/.vs/SampleApp/config/applicationhost.config
+node_modules/
