@@ -715,13 +715,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     var devextreme_data_data_source__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! devextreme/data/data_source */
-    "./node_modules/devextreme/esm/data/data_source.js");
+    "./node_modules/devextreme/data/data_source.js");
+    /* harmony import */
+
+
+    var devextreme_data_data_source__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(devextreme_data_data_source__WEBPACK_IMPORTED_MODULE_2__);
     /* harmony import */
 
 
     var devextreme_data_array_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
     /*! devextreme/data/array_store */
-    "./node_modules/devextreme/esm/data/array_store.js");
+    "./node_modules/devextreme/data/array_store.js");
+    /* harmony import */
+
+
+    var devextreme_data_array_store__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(devextreme_data_array_store__WEBPACK_IMPORTED_MODULE_3__);
     /* harmony import */
 
 
@@ -738,11 +746,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         this.popupMode = "Add";
         this.popupVisible = false;
         this.customers = service.getCustomers();
-        this.customerStore = new devextreme_data_array_store__WEBPACK_IMPORTED_MODULE_3__["default"]({
+        this.customerStore = new devextreme_data_array_store__WEBPACK_IMPORTED_MODULE_3___default.a({
           data: this.customers,
           key: this.key
         });
-        this.gridSource = new devextreme_data_data_source__WEBPACK_IMPORTED_MODULE_2__["default"]({
+        this.gridSource = new devextreme_data_data_source__WEBPACK_IMPORTED_MODULE_2___default.a({
           store: this.customerStore
         });
         this.addClick = this.addClick.bind(this);
