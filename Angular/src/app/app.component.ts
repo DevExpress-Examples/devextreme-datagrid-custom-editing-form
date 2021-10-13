@@ -74,7 +74,7 @@ export class AppComponent {
     }
 
     addClick(e) {
-        this.showPopup("Add", undefined);
+        this.showPopup("Add", {});
     }
 
     editClick(e) {
