@@ -372,7 +372,7 @@ let AppComponent = class AppComponent {
         }
     }
     addClick(e) {
-        this.showPopup("Add", undefined);
+        this.showPopup("Add", {});
     }
     editClick(e) {
         this.showPopup("Edit", Object.assign({}, e.row.data));

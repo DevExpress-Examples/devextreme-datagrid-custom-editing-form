@@ -796,7 +796,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "addClick",
         value: function addClick(e) {
-          this.showPopup("Add", undefined);
+          this.showPopup("Add", {});
         }
       }, {
         key: "editClick",
