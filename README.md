@@ -5,7 +5,7 @@
 <!-- default badges end -->
 # DataGrid for DevExtreme - How to implement a custom editing form using the Popup and Form components
 
-The DataGrid component supports [popup form editing](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/PopupEditing/jQuery/Light/) out of the box. To customize the form, you need to implement the [Popup](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/) and [Form](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxForm/) components from scratch. This example demonstrates how to do it.
+The DataGrid component supports [pop-up form editing](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/PopupEditing/jQuery/Light/) out of the box. To customize the form, follow this example to implement the [Popup](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/) and [Form](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxForm/) components.
 
 ![A custom editing form](devextreme-datagrid-custom-editing-form.png)
 
