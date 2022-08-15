@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { DxFormComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store'
+import ArrayStore from 'devextreme/data/array_store';
 import { Customer, Service } from './app.service';
 
 @Component({
@@ -24,7 +24,10 @@ export class AppComponent {
         this.customers = service.getCustomers();
         this.customerStore = new ArrayStore({
             data: this.customers,
-            key: this.key
+            key: this.key,
+            onPush: () => {
+                this.gridSource.reload();
+            }
         })
         this.gridSource = new DataSource({
             store: this.customerStore
@@ -66,9 +69,7 @@ export class AppComponent {
                 gridStore.push([{ type: "insert", data: this.formData }]);
             else if (this.popupMode === "Edit") 
                 gridStore.push([{ type: "update", data: this.formData, key: this.formData[this.key]}]);
-            
 
-            gridSource.reload();
             this.popupVisible = false;
         }
     }
