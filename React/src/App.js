@@ -15,7 +15,10 @@ import ArrayStore from 'devextreme/data/array_store'
 const key = "ID";
 const customerStore = new ArrayStore({
     data: customers,
-    key: key
+    key: key,
+    onPush:  function() {
+      gridSource.reload()
+    }
   }), 
   gridSource = new DataSource({
     store: customerStore
@@ -37,8 +40,7 @@ const initPopupState = {
 function App() {
   const [{formData, popupVisible, popupMode}, dispatchPopup] = useReducer(popupReducer, initPopupState)
 
-  const confirmBtnOptions = useMemo(() => { 
-    console.log("updated confirmbtnOptions")
+  const confirmBtnOptions = useMemo(() => {
     return { 
       text: 'Confirm', 
       type: 'success',
@@ -83,7 +85,6 @@ function App() {
         customerStore.push([{type: "update", data: formData, key: formData[key]}]);
 
       dispatchPopup({type: "hidePopup"})
-      gridSource.reload();
     }
   }
 

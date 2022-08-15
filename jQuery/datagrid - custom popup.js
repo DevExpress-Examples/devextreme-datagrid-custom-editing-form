@@ -5,8 +5,16 @@ $(function () {
     let popup, grid, form;
 
     grid = $("#grid").dxDataGrid({
-        dataSource: source,
-        keyExpr: key,
+        dataSource:  new DevExpress.data.DataSource({
+            store: {
+                type: "array",
+                data: source,
+                key,
+                onPush: function () {
+                    grid.getDataSource().reload()
+                }
+            }
+        }),
         editing: {
             allowUpdating: true,
             allowAdding: true,

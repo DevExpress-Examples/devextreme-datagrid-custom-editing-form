@@ -79,7 +79,10 @@ import { customers } from './data.js';
 const key = "ID",
   customerStore = new ArrayStore({
       data: customers,
-      key: key
+      key: key,
+      onPush:  function() {
+          gridSource.reload()
+      }
   }),
   gridSource = new DataSource({
     store: customerStore
@@ -134,8 +137,7 @@ export default {
     confirmClick() {
         let result = this.form.validate();
         if (result.isValid) {
-            let gridSource = this.gridSource,
-                gridStore = this.customerStore;
+            const gridStore = this.customerStore;
 
             if (this.popupMode === "Add")
                 gridStore.push([{ type: "insert", data: this.formData }]);
@@ -143,7 +145,6 @@ export default {
                 gridStore.push([{ type: "update", data: this.formData, key: this.formData[key]}]);
             }
             
-            gridSource.reload();
             this.popupVisible = false;
         }
     },
