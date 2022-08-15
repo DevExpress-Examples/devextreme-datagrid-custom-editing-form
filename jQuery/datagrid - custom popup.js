@@ -70,7 +70,6 @@ $(function () {
                         else if (mode === "Edit")
                             gridStore.push([{ type: "update", data: data, key: data[key] }]);
 
-                        gridSource.reload();
                         popup.hide();
                     }
                 }
