@@ -11,7 +11,7 @@ The DataGrid component supports [pop-up form editing](https://js.devexpress.com/
 
 In the DataGrid, implement a function that customizes an **addRowButton**. The **addRowButton** displays the Popup component on click. Add a Form to the Popup [contentTemplate](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/Configuration/#contentTemplate). Implement Popup [toolbar buttons](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/Configuration/toolbarItems/) and call a function that updates the DataGrid data source on click after users fill in the Form.
 
-## Files to Look At
+## Files to Review
 
 - **jQuery**
     - [index.html](jQuery/index.html)
