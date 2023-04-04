@@ -1,0 +1,158 @@
+<dx-data-grid 
+    #grid
+    [dataSource]="gridSource"
+    [showBorders]="true"
+    [repaintChangesOnly]="true"
+>
+    <dxo-editing
+        [allowUpdating]="true"
+        [allowAdding]="true"
+        [allowDeleting]="true"
+        [useIcons]="true"
+        mode="popup"
+    > </dxo-editing>
+    <dxi-column dataField="FirstName" dataType="string"></dxi-column>
+    <dxi-column dataField="LastName" dataType="string"></dxi-column>
+    <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Position" dataType="string"></dxi-column>
+    <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Address" dataType="string"></dxi-column>
+    <dxi-column type="buttons">
+        <dxi-button name="edit" [onClick]="editRow"></dxi-button>
+        <dxi-button name="delete"></dxi-button>
+    </dxi-column>
+    <dxo-toolbar>
+        <dxi-item location="after">
+            <div *dxTemplate>
+                <dx-button icon="plus" (onClick)="addRow()"></dx-button>
+            </div>
+        </dxi-item>
+    </dxo-toolbar>
+</dx-data-grid>
+
+<dx-popup
+    [(title)]="popupMode"
+    [hideOnOutsideClick]="true"
+    [height]="420"
+    [(visible)]="popupVisible"
+>
+    <dxi-toolbar-item 
+        widget="dxButton"
+        location="after"
+        toolbar="bottom"
+        [options]="{ 
+            text: 'Confirm', 
+            type: 'success',
+            onClick: confirmChanges 
+        }"
+    > </dxi-toolbar-item>
+    <dxi-toolbar-item 
+        widget="dxButton"
+        location="after"
+        toolbar="bottom"
+        [options]="{ 
+            text: 'Cancel',
+            onClick: cancelChanges 
+        }"
+    > </dxi-toolbar-item>
+            
+    <div *dxTemplate="let data of 'content'">
+        <dx-form #form
+            [(formData)]="formData"
+        >
+            <dxi-item itemType="group" [colCount]="2" >
+                <dxi-item dataField="FirstName" >
+                    <dxi-validation-rule
+                        type="required"
+                        message="First Name is required."
+                    ></dxi-validation-rule>
+                    <dxo-label template="name"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                    dataField="Position"
+                    editorType="dxSelectBox"
+                    [editorOptions]="positionEditorOptions"
+                >
+                    <dxo-label template="position"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="LastName" >
+                    <dxi-validation-rule
+                        type="required"
+                        message="Last Name is required."
+                    ></dxi-validation-rule>
+                    <dxo-label template="name"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="Address">
+                    <dxo-label template="address"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                    dataField="BirthDate"
+                    editorType="dxDateBox"
+                >
+                    <dxi-validation-rule
+                        type="required"
+                        message="Birth Date is required."
+                        invalidDateMessage="The date must have the following format: mm/dd/yyyy" 
+                    ></dxi-validation-rule>
+                    <dxo-label template="date"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                    dataField="HireDate"
+                    editorType="dxDateBox"
+                >
+                    <dxo-label template="date"></dxo-label>
+                </dxi-item>
+                <dxi-item
+                    dataField="Notes"
+                    editorType="dxTextArea"
+                    [editorOptions]="notesEditorOptions"
+                    [colSpan]="2"
+                >
+                    <dxo-label template="notes"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="Phone" [editorOptions]="phoneEditorOptions">
+                    <dxi-validation-rule
+                        type="required"
+                        message="Phone number is required."
+                    ></dxi-validation-rule>
+                    <dxo-label template="phone"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="Email">
+                    <dxi-validation-rule
+                        type="email"
+                        message="Email is incorrect."
+                    ></dxi-validation-rule>
+                    <dxo-label template="email"></dxo-label>
+                </dxi-item>
+            </dxi-item>
+      
+            <ng-container *ngFor="let label of labelTemplates">
+                <div *dxTemplate="let data of label.name">
+                    <div><i class="dx-icon {{ label.icon }}"></i>{{ data.text }}</div>
+                </div>
+            </ng-container>
+      
+            <div *dxTemplate="let data of 'notes'">
+                <div id="template-content">
+                    <i id="helpedInfo" class="dx-icon dx-icon-info"></i>
+                    Additional
+                    <br />
+                    {{ data.text }}
+                </div>
+      
+                <dx-tooltip
+                    target="#helpedInfo"
+                    showEvent="mouseenter"
+                    hideEvent="mouseleave"
+                >
+                    <div *dxTemplate="let data = data; of: 'content'">
+                        <div id="tooltip-content">
+                            This field must not exceed 200 characters
+                        </div>
+                    </div>
+                </dx-tooltip>
+            </div>
+        </dx-form>
+    </div>
+</dx-popup>
+
