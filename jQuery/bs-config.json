@@ -1,0 +1,5 @@
+{
+    "port": 5050,
+    "startPath": "src/index.html",
+    "files": ["./src/**/*.{html,css,js}"]
+}
