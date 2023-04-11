@@ -6,12 +6,12 @@ import './App.css';
 import DataGrid, { Column, Editing, Button, Toolbar } from 'devextreme-react/data-grid';
 import Popup, { ToolbarItem } from 'devextreme-react/popup';
 import Form, { Item, GroupItem, Label } from 'devextreme-react/form';
+import validationEngine from 'devextreme/ui/validation_engine';
 import AddRowButton from 'devextreme-react/button';
 import LabelTemplate from './LabelTemplate.js';
 import LabelNotesTemplate from './LabelNotesTemplate.js';
 import 'devextreme-react/text-area';
 
-import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 
 import { employees } from './data.js';
@@ -28,77 +28,61 @@ const employeeStore = new ArrayStore({
     key: "ID",
 });
 
-const dataGridStore = new DataSource({
-    store: employeeStore,
-    reshapeOnPush: true,
-});
-
+const validationGroupName = "gridForm";
 const App = () => {
-    const [rowData, setRowData] = useState({});
-    const [popupVisible, setPopupVisible] = useState(false); 
-    const [popupMode, setPopupMode] = useState("");
-
-    const formRef = useRef(null);
     const gridRef = useRef(null);
+    const [{isNewRecord, formData, visible}, setPopupState] = useState({});
+
+    const showPopup = useCallback((isNewRecord, formData) => { 
+        setPopupState({isNewRecord, formData, visible: true});
+    }, []);
+
+    const hidePopup = useCallback(() => { 
+        setPopupState({visible: false});
+    }, []);
 
     const confirmChanges = useCallback(() => { 
-        let validationResult = formRef.current.instance.validate();
-        
-        if (validationResult.isValid) {
-            let currentFormData = formRef.current.instance.option("formData");
+        const result = validationEngine.validateGroup(validationGroupName);
+     
+        if (result.isValid) {
 
-            if (popupMode === "Add") {
-                employeeStore.insert(currentFormData); 
-            } else if (popupMode === "Edit") {
-                employeeStore.update(currentFormData["ID"], currentFormData);
-            } 
+            if (isNewRecord)
+                employeeStore.insert(formData); 
+            else 
+                employeeStore.update(formData["ID"], formData);
 
             gridRef.current.instance.refresh(true);
-            setPopupVisible(false);
+            hidePopup();
         }
-    }, [popupMode]);
-
-    const cancelChanges = useCallback(() => {  
-        setPopupVisible(false);
-    }, []);
-
-    const showPopup = useCallback((popupMode, data) => { 
-        setPopupVisible(true);
-        setPopupMode(popupMode);
-        setRowData(data);
-    }, []);
-
-    const onHiding = useCallback(() => { 
-        setPopupVisible(false);
-    }, []);
+    }, [isNewRecord, formData, hidePopup]);
 
     const confirmBtnOptions = useMemo(() => {
         return { 
-            text: 'Confirm', 
-            type: 'success',
+            text: "Confirm", 
+            type: "success",
             onClick: confirmChanges 
         }
     }, [confirmChanges]);
     
     const cancelBtnOptions = useMemo(() => { 
         return { 
-            text: 'Cancel', 
-            onClick: cancelChanges 
+            text: "Cancel", 
+            onClick: hidePopup
         }
-    }, [cancelChanges]);
+    }, [hidePopup]);
 
     const editRow = useCallback((e) => { 
-        showPopup("Edit", {...e.row.data});
+        showPopup(false, e.row.data);
     }, [showPopup]);
 
     const addRow = useCallback(() => { 
-        showPopup("Add", {});
+        showPopup(true, {});
     }, [showPopup]);
 
     return (
         <React.Fragment>
             <DataGrid
-                dataSource={dataGridStore}
+                dataSource={{store: employeeStore}}
                 ref={gridRef}
                 showBorders={true}
                 repaintChangesOnly={true}
@@ -123,67 +107,69 @@ const App = () => {
                 <Toolbar>
                     <Item location="after">
                         <AddRowButton
-                            icon='plus'
+                            icon="plus"
                             onClick={addRow} />
                     </Item>
                 </Toolbar>
             </DataGrid>
-
-            <Popup 
-                title={popupMode}
-                hideOnOutsideClick={true}
-                visible={popupVisible}
-                height={420}
-                onHiding={onHiding}
-            >
-                <ToolbarItem 
-                    widget="dxButton"
-                    location="after"
-                    toolbar="bottom"
-                    options={confirmBtnOptions} 
-                />
-                <ToolbarItem 
-                    widget="dxButton"
-                    location="after"
-                    toolbar="bottom"
-                    options={cancelBtnOptions} 
-                />
-                
-                <Form 
-                    ref={formRef}
-                    formData={rowData} 
+            { visible ? (
+                <Popup 
+                    title={isNewRecord ? "Add" : "Edit"}
+                    hideOnOutsideClick={true}
+                    visible={true}
+                    height={"auto"}
+                    onHiding={hidePopup}
                 >
-                    <GroupItem colCount={2} >
-                        <Item dataField="FirstName" validationRules={validationRules.firstName} >
-                            <Label render={LabelTemplate('user')} />
-                        </Item>
-                        <Item dataField="Position" editorType="dxSelectBox" editorOptions={positionEditorOptions} >
-                            <Label render={LabelTemplate('info')} />
-                        </Item>
-                        <Item dataField="LastName" validationRules={validationRules.lastName} >
-                            <Label render={LabelTemplate('user')} />
-                        </Item>
-                        <Item dataField="Address">
-                            <Label render={LabelTemplate('home')} />
-                        </Item>
-                        <Item dataField="BirthDate" editorType="dxDateBox" validationRules={validationRules.birthDate} >
-                            <Label render={LabelTemplate('event')} />
-                        </Item>
-                        <Item dataField="HireDate" editorType="dxDateBox" >
-                            <Label render={LabelTemplate('event')} />
-                        </Item>
-                        <Item dataField="Notes" colSpan={2} editorType="dxTextArea" editorOptions={notesEditorOptions}>
-                            <Label render={LabelNotesTemplate} />
-                        </Item>
-                        <Item dataField="Phone" editorOptions={phoneEditorOptions} validationRules={validationRules.phone}>
-                            <Label render={LabelTemplate('tel')} />
-                        </Item>
-                        <Item dataField="Email" validationRules={validationRules.email}>
-                            <Label render={LabelTemplate('email')} />
-                        </Item>
-                    </GroupItem>
-                </Form>
-            </Popup>
+                    <ToolbarItem 
+                        widget="dxButton"
+                        location="after"
+                        toolbar="bottom"
+                        options={confirmBtnOptions} 
+                    />
+                    <ToolbarItem 
+                        widget="dxButton"
+                        location="after"
+                        toolbar="bottom"
+                        options={cancelBtnOptions} 
+                    />
+                    
+                    <Form 
+                        validationGroup={validationGroupName}
+                        formData={formData} 
+                    >
+                        <GroupItem colCount={2} >
+                            <Item dataField="FirstName" validationRules={validationRules.firstName} >
+                                <Label render={LabelTemplate("user")} />
+                            </Item>
+                            <Item dataField="Position" editorType="dxSelectBox" editorOptions={positionEditorOptions} >
+                                <Label render={LabelTemplate("info")} />
+                            </Item>
+                            <Item dataField="LastName" validationRules={validationRules.lastName} >
+                                <Label render={LabelTemplate("user")} />
+                            </Item>
+                            <Item dataField="Address">
+                                <Label render={LabelTemplate("home")} />
+                            </Item>
+                            <Item dataField="BirthDate" editorType="dxDateBox" validationRules={validationRules.birthDate} >
+                                <Label render={LabelTemplate("event")} />
+                            </Item>
+                            <Item dataField="HireDate" editorType="dxDateBox" >
+                                <Label render={LabelTemplate("event")} />
+                            </Item>
+                            <Item dataField="Notes" colSpan={2} editorType="dxTextArea" editorOptions={notesEditorOptions}>
+                                <Label render={LabelNotesTemplate} />
+                            </Item>
+                            <Item dataField="Phone" editorOptions={phoneEditorOptions} validationRules={validationRules.phone}>
+                                <Label render={LabelTemplate("tel")} />
+                            </Item>
+                            <Item dataField="Email" validationRules={validationRules.email}>
+                                <Label render={LabelTemplate("email")} />
+                            </Item>
+                        </GroupItem>
+                    </Form>
+                </Popup>
+            ) : null }
+            
         </React.Fragment>
     );
 }
