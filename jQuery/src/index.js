@@ -186,7 +186,7 @@ $(function () {
 
     const popup = $("#popup").dxPopup({
         hideOnOutsideClick: true,
-        height: 420,
+        height: "auto",
     }).dxPopup("instance");
 
     const confirmItem = {
@@ -216,7 +216,6 @@ $(function () {
         popup.option({
             title: isNewRecord ? "Add" : "Edit",
             contentTemplate,
-            height: "auto",
             toolbarItems: [
                 {
                     ...confirmItem,
