@@ -2,7 +2,7 @@
     <div id="app">
         <DxDataGrid 
             ref="grid"
-            :data-source="gridSource"
+            :data-source="{ store: employeeStore }"
             :show-borders="true"
             :repaint-changes-only="true"
         >
@@ -39,11 +39,10 @@
         </DxDataGrid>
         
         <DxPopup 
-            ref="popup"
-            title="popupMode"
-            :height="420"
+            :title="this.isNewRecord ? 'Add' : 'Edit'"
+            height="auto"
             :close-on-outside-click="true"
-            :visible.sync="popupVisible"
+            :visible.sync="visible"
         >
             <DxToolbarItem
                 widget="dxButton"
@@ -61,13 +60,13 @@
                 toolbar="bottom"
                 :options="{ 
                     text: 'Cancel',
-                    onClick: cancelChanges 
+                    onClick: hidePopup 
                 }"
             />
             <template>
             </template>
             <DxForm 
-                ref="form"
+                :validationGroup="validationGroupName"
                 :form-data.sync="formData"
             >   
                 <DxGroupItem
@@ -162,13 +161,12 @@ import DxDataGrid, { DxColumn, DxButton, DxEditing, DxToolbar, DxItem } from 'de
 import DxPopup, { DxToolbarItem } from 'devextreme-vue/popup'
 import DxForm, { DxSimpleItem, DxLabel, DxGroupItem } from 'devextreme-vue/form';
 import DxAddRowButton from 'devextreme-vue/button';
-
+import validationEngine from 'devextreme/ui/validation_engine';
 import 'devextreme-vue/text-area';
 
 import LabelTemplate from './LabelTemplate.vue';
 import LabelNotesTemplate from './LabelNotesTemplate.vue';
 
-import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 
 import { employees, positions } from './data.js';
@@ -176,13 +174,12 @@ import { employees, positions } from './data.js';
 const employeeStore = new ArrayStore({
     data: employees,
     key: 'ID',
-}),
-gridSource = new DataSource({
-    store: employeeStore
 });
 
+
+
 export default {
-    name: 'App',
+    name: "App",
     components: {
         DxDataGrid,
         DxColumn,
@@ -203,74 +200,63 @@ export default {
     data() {
         return {
             formData: {},
-            popupMode: 'Add',
-            popupVisible: false,
+            isNewRecord: null,
+            visible: false,
             employeeStore,
-            gridSource,
+            validationGroupName: "gridForm", 
             positionEditorOptions: { items: positions, searchEnabled: true },
             notesEditorOptions: { height: 90, maxLength: 200 },
             phoneEditorOptions: { 
-                mask: '+1 (X00) 000-0000', 
+                mask: "+1 (X00) 000-0000", 
                 maskRules: { X: /[02-9]/ },
-                maskInvalidMessage: 'The phone must have a correct USA phone format',
+                maskInvalidMessage: "The phone must have a correct USA phone format",
             },
             validationRules: {
-                firstName: [
-                    { type: 'required', message: 'First Name is required.' },
-                ],
-                lastName: [
-                    { type: 'required', message: 'Last Name is required.' },
-                ],
-                phone: [
-                    { type: 'required', message: 'Phone number is required.' },
-                ],
-                email: [
-                    { type: 'email', message: 'Email is incorrect.' },
-                ],
+                firstName: [{ type: "required", message: "First Name is required." }],
+                lastName: [{ type: "required", message: "Last Name is required." }],
+                phone: [{ type: "required", message: "Phone number is required." }],
+                email: [{ type: "email", message: "Email is incorrect." }],
                 birthDate: [
                     { 
-                        type: 'required', 
-                        message: 'Birth Date is required.', 
-                        invalidDateMessage: 'The date must have the following format: mm/dd/yyyy', 
+                        type: "required", 
+                        message: "Birth Date is required.", 
+                        invalidDateMessage: "The date must have the following format: mm/dd/yyyy", 
                     },
                 ]
             }
         }
     },
     methods: {
-        showPopup(popupMode, data) {
-            this.formData = data;
-            this.popupMode = popupMode;
-            this.popupVisible = true;
+        showPopup(isNewRecord, formData) {
+            this.formData = formData;
+            this.isNewRecord = isNewRecord;
+            this.visible = true;
         },
         addRow() {
-            this.showPopup('Add', {});
+            this.showPopup(true, {});
         },
         editRow(e) {
-            this.showPopup('Edit', {...e.row.data});
+            this.showPopup(false, e.row.data);
         },
         confirmChanges() {
-            let result = this.form.validate();
-            if (result.isValid) {
-                const gridStore = this.employeeStore;
+            const result = validationEngine.validateGroup(this.validationGroupName);
 
-                if (this.popupMode === 'Add')
-                    gridStore.insert(this.formData);
-                else if (this.popupMode === 'Edit') 
-                    gridStore.update(this.formData['ID'], this.formData );
+            if (result.isValid) {
+
+                if (this.isNewRecord)
+                    this.employeeStore.insert(this.formData); 
+                else 
+                    this.employeeStore.update(this.formData["ID"], this.formData);
                 
                 this.grid.refresh(true);
-                this.popupVisible = false;
+                this.hidePopup();
             }
         },
-        cancelChanges() {
-            this.popupVisible = false;
+        hidePopup() {
+            this.visible = false;
         }
     },
     computed: {
-        form: function() {
-            return this.$refs.form.instance;
-        },
         grid: function() {
             return this.$refs.grid.instance;
         }
