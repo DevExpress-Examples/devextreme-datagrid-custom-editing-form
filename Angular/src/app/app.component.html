@@ -1,6 +1,6 @@
 <dx-data-grid 
     #grid
-    [dataSource]="gridSource"
+    [dataSource]="{ store: this.employeeStore }"
     [showBorders]="true"
     [repaintChangesOnly]="true"
 >
@@ -31,10 +31,11 @@
 </dx-data-grid>
 
 <dx-popup
-    [(title)]="popupMode"
+    [title]="isNewRecord ? 'Add' : 'Edit'"
     [hideOnOutsideClick]="true"
-    [height]="420"
-    [(visible)]="popupVisible"
+    height="auto"
+    [(visible)]="visible"
+    onHiding="hidePopup"
 >
     <dxi-toolbar-item 
         widget="dxButton"
@@ -52,12 +53,13 @@
         toolbar="bottom"
         [options]="{ 
             text: 'Cancel',
-            onClick: cancelChanges 
+            onClick: hidePopup 
         }"
     > </dxi-toolbar-item>
             
     <div *dxTemplate="let data of 'content'">
-        <dx-form #form
+        <dx-form
+            [validationGroup]="validationGroupName"
             [(formData)]="formData"
         >
             <dxi-item itemType="group" [colCount]="2" >
