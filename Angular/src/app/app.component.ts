@@ -5,6 +5,7 @@ import validationEngine from 'devextreme/ui/validation_engine';
 
 import ArrayStore from 'devextreme/data/array_store';
 import { Employee, Service } from './app.service';
+import { StartCallback } from 'http-proxy';
 
 @Component({
     selector: 'app-root',
@@ -19,8 +20,10 @@ export class AppComponent {
     formData: Object = {};
     isNewRecord: boolean = true;
     visible: boolean = false;
-
-    validationGroupName: string;
+   
+    get validationGroupName(): string { 
+        return "gridForm"; 
+    }
 
     employees: Employee[];
     employeeStore: ArrayStore;
@@ -29,6 +32,39 @@ export class AppComponent {
     notesEditorOptions: Object;
     phoneEditorOptions: Object;
     labelTemplates: Object;
+
+    showPopup: Function = (isNewRecord, formData) => {
+        this.formData = formData;
+        this.isNewRecord = isNewRecord;
+        this.visible = true;
+    }
+
+    hidePopup: Function = () => { 
+        this.visible = false;
+    };
+
+    confirmChanges: Function = () => {
+        const result = validationEngine.validateGroup(this.validationGroupName);
+     
+        if (!result.isValid)
+            return;
+
+            if (this.isNewRecord)
+                this.employeeStore.insert(this.formData); 
+            else 
+                this.employeeStore.update(this.formData["ID"], this.formData);
+
+            this.grid.instance.refresh(true);
+            this.hidePopup();
+    }
+
+    addRow: Function = () => {
+        this.showPopup(true, {});
+    }
+
+    editRow: Function = (e) => {
+        this.showPopup(false, {...e.row.data});
+    }
 
     constructor(service: Service) {
         this.employees = service.getEmployees();
@@ -54,45 +90,5 @@ export class AppComponent {
             { name: "phone", icon: "dx-icon-tel" },
             { name: "email", icon: "dx-icon-email" },
         ];
-
-        this.validationGroupName = "gridForm";
-
-        this.addRow = this.addRow.bind(this);
-        this.editRow = this.editRow.bind(this);
-        this.confirmChanges = this.confirmChanges.bind(this);
-        this.hidePopup = this.hidePopup.bind(this);
-    }
-
-    showPopup(isNewRecord, formData) {
-        this.formData = formData;
-        this.isNewRecord = isNewRecord;
-        this.visible = true;
-    }
-
-    hidePopup() { 
-        this.visible = false;
-    };
-
-    confirmChanges() {
-        const result = validationEngine.validateGroup(this.validationGroupName);
-     
-        if (!result.isValid) 
-            return;
-
-            if (this.isNewRecord)
-                this.employeeStore.insert(this.formData); 
-            else 
-                this.employeeStore.update(this.formData["ID"], this.formData);
-
-            this.grid.instance.refresh(true);
-            this.hidePopup(); 
-    }
-
-    addRow() {
-        this.showPopup(true, {});
-    }
-
-    editRow(e) {
-        this.showPopup(false, e.row.data);
     }
 }

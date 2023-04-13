@@ -30,11 +30,12 @@
     </dxo-toolbar>
 </dx-data-grid>
 
-<dx-popup
+<dx-popup 
+    *ngIf="visible"
     [title]="isNewRecord ? 'Add' : 'Edit'"
     [hideOnOutsideClick]="true"
     height="auto"
-    [(visible)]="visible"
+    [visible]="true"
     onHiding="hidePopup"
 >
     <dxi-toolbar-item 
@@ -60,7 +61,7 @@
     <div *dxTemplate="let data of 'content'">
         <dx-form
             [validationGroup]="validationGroupName"
-            [(formData)]="formData"
+            [formData]="formData"
         >
             <dxi-item itemType="group" [colCount]="2" >
                 <dxi-item dataField="FirstName" >
