@@ -16,7 +16,7 @@ import { Employee, Service } from './app.service';
 export class AppComponent {
     @ViewChild("grid", {static: false}) grid: DxDataGridComponent;
 
-    formData: any = {};
+    formData: Object = {};
     isNewRecord: boolean = true;
     visible: boolean = false;
 
@@ -76,7 +76,8 @@ export class AppComponent {
     confirmChanges() {
         const result = validationEngine.validateGroup(this.validationGroupName);
      
-        if (result.isValid) {
+        if (!result.isValid) 
+            return;
 
             if (this.isNewRecord)
                 this.employeeStore.insert(this.formData); 
@@ -84,8 +85,7 @@ export class AppComponent {
                 this.employeeStore.update(this.formData["ID"], this.formData);
 
             this.grid.instance.refresh(true);
-            this.hidePopup();
-        }
+            this.hidePopup(); 
     }
 
     addRow() {
