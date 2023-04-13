@@ -241,16 +241,16 @@ export default {
         confirmChanges() {
             const result = validationEngine.validateGroup(this.validationGroupName);
 
-            if (result.isValid) {
+            if (!result.isValid) 
+                return;
 
                 if (this.isNewRecord)
                     this.employeeStore.insert(this.formData); 
                 else 
                     this.employeeStore.update(this.formData["ID"], this.formData);
-                
+
                 this.grid.refresh(true);
-                this.hidePopup();
-            }
+                this.hidePopup(); 
         },
         hidePopup() {
             this.visible = false;
