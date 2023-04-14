@@ -6,6 +6,11 @@ import validationEngine from 'devextreme/ui/validation_engine';
 import ArrayStore from 'devextreme/data/array_store';
 import { Employee, Service } from './app.service';
 
+type PositionEditorOptions = {
+    items: string[], 
+    searchEnabled: boolean
+}
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -19,11 +24,11 @@ export class AppComponent {
     employees: Employee[];
     employeeStore: ArrayStore;
 
-    formData = {};
+    formData: Employee[];
     isNewRecord = true;
     visible = false;
 
-    positionEditorOptions = {};
+    positionEditorOptions: PositionEditorOptions;
     notesEditorOptions = { height: 90, maxLength: 200 };
     phoneEditorOptions = { 
         mask: "+1 (X00) 000-0000", 
@@ -60,13 +65,13 @@ export class AppComponent {
         if (!result.isValid)
             return;
 
-            if (this.isNewRecord)
-                this.employeeStore.insert(this.formData); 
-            else 
-                this.employeeStore.update(this.formData["ID"], this.formData);
+        if (this.isNewRecord)
+            this.employeeStore.insert(this.formData); 
+        else 
+            this.employeeStore.update(this.formData["ID"], this.formData);
 
-            this.grid.instance.refresh(true);
-            this.hidePopup();
+        this.grid.instance.refresh(true);
+        this.hidePopup();
     };
 
     addRow = () => {

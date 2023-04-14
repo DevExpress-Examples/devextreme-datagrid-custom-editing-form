@@ -14,7 +14,7 @@ export class Employee {
     Email: string;
 }
 
-let employees: Employee[] = [{
+const employees: Employee[] = [{
     ID: 1,
     FirstName: 'John',
     LastName: 'Heart',
@@ -135,6 +135,8 @@ let employees: Employee[] = [{
     Phone: '14842989306',
     Email: 'amichalo@live.com',
 }];
+
+
 
 const positions: string[] = [
     'HR Manager',
