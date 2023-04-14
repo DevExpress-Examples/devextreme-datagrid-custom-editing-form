@@ -46,7 +46,7 @@ $(function () {
                     {
                         name: "edit",
                         onClick: (e) => {
-                            showPopup(false, e.row.data);
+                            showPopup(false, {...e.row.data});
                         },
                     },
                     "delete",
@@ -221,17 +221,16 @@ $(function () {
                     ...confirmItem,
                     onClick: () => {
                         let result = DevExpress.validationEngine.validateGroup(validationGroupName);
-                        if (result.isValid) {
-                            const gridSource = grid.getDataSource(),
-                                gridStore = gridSource.store();
-                            if (isNewRecord) {
-                                gridStore.insert(data);
-                            } else {
-                                gridStore.update(data["ID"], data);
-                            }
-                            grid.refresh(true);
-                            popup.hide();
-                        }
+                        if (!result.isValid) 
+                            return;
+                        const gridSource = grid.getDataSource(),
+                            gridStore = gridSource.store();
+                        if (isNewRecord)
+                            gridStore.insert(data);
+                        else
+                            gridStore.update(data["ID"], data);
+                        grid.refresh(true);
+                        popup.hide();
                     },
                 },
                 cancelItem,
