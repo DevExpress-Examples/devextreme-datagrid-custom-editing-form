@@ -136,7 +136,7 @@ let employees: Employee[] = [{
     Email: 'amichalo@live.com',
 }];
 
-const positions : string[] = [
+const positions: string[] = [
     'HR Manager',
     'IT Manager',
     'CEO',
@@ -150,11 +150,11 @@ const positions : string[] = [
 
 @Injectable()
 export class Service {
-    getEmployees() {
+    getEmployees(): Employee[] {
         return employees;
     }
 
-    getPositions() : string[] {
+    getPositions(): string[] {
         return positions;
     }
 }

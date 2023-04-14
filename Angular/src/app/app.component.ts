@@ -5,7 +5,6 @@ import validationEngine from 'devextreme/ui/validation_engine';
 
 import ArrayStore from 'devextreme/data/array_store';
 import { Employee, Service } from './app.service';
-import { StartCallback } from 'http-proxy';
 
 @Component({
     selector: 'app-root',
@@ -17,33 +16,45 @@ import { StartCallback } from 'http-proxy';
 export class AppComponent {
     @ViewChild("grid", {static: false}) grid: DxDataGridComponent;
 
-    formData: Object = {};
-    isNewRecord: boolean = true;
-    visible: boolean = false;
-   
-    get validationGroupName(): string { 
-        return "gridForm"; 
-    }
-
     employees: Employee[];
     employeeStore: ArrayStore;
 
-    positionEditorOptions: Object;
-    notesEditorOptions: Object;
-    phoneEditorOptions: Object;
-    labelTemplates: Object;
+    formData = {};
+    isNewRecord = true;
+    visible = false;
 
-    showPopup: Function = (isNewRecord, formData) => {
+    positionEditorOptions = {};
+    notesEditorOptions = { height: 90, maxLength: 200 };
+    phoneEditorOptions = { 
+        mask: "+1 (X00) 000-0000", 
+        maskRules: { X: /[02-9]/ },
+        maskInvalidMessage: "The phone must have a correct USA phone format", 
+    };
+
+    labelTemplates = [
+        { name: "name", icon: "dx-icon-user" },
+        { name: "position", icon: "dx-icon-info" },
+        { name: "date", icon: "dx-icon-event" },
+        { name: "address", icon: "dx-icon-home" },
+        { name: "phone", icon: "dx-icon-tel" },
+        { name: "email", icon: "dx-icon-email" },
+    ];
+
+    get validationGroupName() { 
+        return "gridForm"; 
+    }
+
+    showPopup = (isNewRecord, formData) => {
         this.formData = formData;
         this.isNewRecord = isNewRecord;
         this.visible = true;
-    }
+    };
 
-    hidePopup: Function = () => { 
+    hidePopup = () => { 
         this.visible = false;
     };
 
-    confirmChanges: Function = () => {
+    confirmChanges = () => {
         const result = validationEngine.validateGroup(this.validationGroupName);
      
         if (!result.isValid)
@@ -56,15 +67,15 @@ export class AppComponent {
 
             this.grid.instance.refresh(true);
             this.hidePopup();
-    }
+    };
 
-    addRow: Function = () => {
+    addRow = () => {
         this.showPopup(true, {});
-    }
+    };
 
-    editRow: Function = (e) => {
+    editRow = (e) => {
         this.showPopup(false, {...e.row.data});
-    }
+    };
 
     constructor(service: Service) {
         this.employees = service.getEmployees();
@@ -72,23 +83,8 @@ export class AppComponent {
         this.employeeStore = new ArrayStore({
             data: this.employees,
             key: "ID",
-        });
+        });  
 
         this.positionEditorOptions = { items: service.getPositions(), searchEnabled: true };
-        this.notesEditorOptions = { height: 90, maxLength: 200 };
-        this.phoneEditorOptions = { 
-            mask: "+1 (X00) 000-0000", 
-            maskRules: { X: /[02-9]/ },
-            maskInvalidMessage: "The phone must have a correct USA phone format", 
-        };
-
-        this.labelTemplates = [
-            { name: "name", icon: "dx-icon-user" },
-            { name: "position", icon: "dx-icon-info" },
-            { name: "date", icon: "dx-icon-event" },
-            { name: "address", icon: "dx-icon-home" },
-            { name: "phone", icon: "dx-icon-tel" },
-            { name: "email", icon: "dx-icon-email" },
-        ];
     }
 }
