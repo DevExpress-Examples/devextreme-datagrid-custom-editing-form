@@ -63,8 +63,7 @@
                     onClick: hidePopup 
                 }"
             />
-            <template>
-            </template>
+            
             <DxForm 
                 :validationGroup="validationGroupName"
                 :form-data.sync="formData"
@@ -150,7 +149,6 @@
                         icon="email"
                     />
                 </template>
-        
             </DxForm>
         </DxPopup>
     </div>
