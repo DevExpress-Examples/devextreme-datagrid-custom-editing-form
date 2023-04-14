@@ -1,18 +1,10 @@
 import { positions } from './data.js';
 
 export const validationRules = {
-    firstName: [
-        { type: 'required', message: 'First Name is required.' },
-    ],
-    lastName: [
-        { type: 'required', message: 'Last Name is required.' },
-    ],
-    phone: [
-        { type: 'required', message: 'Phone number is required.' },
-    ],
-    email: [
-        { type: 'email', message: 'Email is incorrect.' },
-    ],
+    firstName: [{ type: 'required', message: 'First Name is required.' }],
+    lastName: [{ type: 'required', message: 'Last Name is required.' }],
+    phone: [{ type: 'required', message: 'Phone number is required.' }],
+    email: [{ type: 'email', message: 'Email is incorrect.' }],
     birthDate: [
         { 
             type: 'required', 
