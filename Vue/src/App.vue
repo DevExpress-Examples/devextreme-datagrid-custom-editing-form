@@ -176,8 +176,6 @@ const employeeStore = new ArrayStore({
     key: 'ID',
 });
 
-
-
 export default {
     name: "App",
     components: {
@@ -236,7 +234,7 @@ export default {
             this.showPopup(true, {});
         },
         editRow(e) {
-            this.showPopup(false, e.row.data);
+            this.showPopup(false, {...e.row.data});
         },
         confirmChanges() {
             const result = validationEngine.validateGroup(this.validationGroupName);
@@ -263,4 +261,3 @@ export default {
     }
 }
 </script>
-
