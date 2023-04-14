@@ -44,16 +44,17 @@ const App = () => {
     const confirmChanges = useCallback(() => { 
         const result = validationEngine.validateGroup(validationGroupName);
      
-        if (result.isValid) {
+        if (!result.isValid) 
+            return;
 
-            if (isNewRecord)
-                employeeStore.insert(formData); 
-            else 
-                employeeStore.update(formData["ID"], formData);
+        if (isNewRecord)
+            employeeStore.insert(formData); 
+        else 
+            employeeStore.update(formData["ID"], formData);
 
-            gridRef.current.instance.refresh(true);
-            hidePopup();
-        }
+        gridRef.current.instance.refresh(true);
+        hidePopup();
+        
     }, [isNewRecord, formData, hidePopup]);
 
     const confirmBtnOptions = useMemo(() => {
@@ -72,7 +73,7 @@ const App = () => {
     }, [hidePopup]);
 
     const editRow = useCallback((e) => { 
-        showPopup(false, e.row.data);
+        showPopup(false, {...e.row.data});
     }, [showPopup]);
 
     const addRow = useCallback(() => { 
