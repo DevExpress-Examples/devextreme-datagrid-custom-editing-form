@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "jquery": "3.5.1",
+    "devextreme": "^22.2.3",
+    "devextreme-aspnet-data": "^2.9.1",
+    "bootstrap": "^4.6.0"
+  },
+  "devDependencies": {
+    "gulp": "4.0.2",
+    "gulp-concat": "2.6.1",
+    "rimraf": "3.0.0"
+  }
+}
