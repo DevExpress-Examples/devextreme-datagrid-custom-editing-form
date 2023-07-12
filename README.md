@@ -4,11 +4,11 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
 
-# DataGrid for DevExtreme - How to implement a custom editing form using the Popup and Form components
+# DevExtreme DataGrid – Create a custom Pop-up Edit Form using Popup and Form components
 
-The DataGrid component supports [pop-up form editing](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/PopupEditing/jQuery/Light/) out of the box. To customize the form, you can use the [Popup](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/) and [Form](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxForm/) components.
+Our DataGrid component ships with a built-in Pop-up Edit Form (for data editing purposes). To create a custom pop-up form, simply use our [Popup](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/) and [Form](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxForm/) UI components as follows:
 
-In the DataGrid, implement a callback function that displays a Popup when a user clicks the built-in "Add row" button.  Add a Form to the Popup [contentTemplate](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/Configuration/#contentTemplate). Specify Popup [toolbar buttons](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/Configuration/toolbarItems/) and call a function that updates the DataGrid data source after a user fills in the Form and clicks the "Confirm" button.
+Implement a DataGrid callback function that displays the Popup when a user clicks the built-in "Add row" button. Add a Form to the Popup [contentTemplate](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/Configuration/#contentTemplate) and specify desired Popup [toolbar buttons](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/Configuration/toolbarItems/). Next, call a function that updates the DataGrid data source once users enter/modify Form values and submit changes (by pressing the "Confirm" button).
 
 <div align="center"><img alt="DataGrid for DevExtreme - How to implement a custom editing form using the Popup and Form components" src="dx-datagrid-custom-editing-form.png" /></div>
 
