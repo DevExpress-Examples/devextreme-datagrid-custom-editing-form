@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "npm run lite",
-    "lite": "lite-server -c ./bs-config.json"
+    "lite": "lite-server -c ./bs-config.json",
+    "build": "npm run lint"
   },
   "devDependencies": {
     "eslint": "^8.33.0",

@@ -6,7 +6,7 @@ Download the example and use Visual Studio 2019 to open the project.
 
 ## Client-side resources and bundling
 
-This project uses [NPM](http://npmjs.com/) and [Gulp.js](https://gulpjs.com/) to install client-side libraries. The project restores NPM packages before the first build. Then, Gulp bundles required scripts and CSS files into the resulting package during the first and every next build. 
+This project uses [NPM](https://www.npmjs.com/) and [Gulp.js](https://gulpjs.com/) to install client-side libraries. The project restores NPM packages before the first build. Then, Gulp bundles required scripts and CSS files into the resulting package during the first and every next build. 
 
 The resulted bundles will be located in the `wwwroot` folder:
 * `css/vendor.css` - a file with all CSS styles.
