@@ -22,7 +22,8 @@ function Install-Packages {
 
     # Loop through each package and install it individually
     foreach ($package in $packages) {
-        $packageWithVersion = "$package@$buildVersion"
+        $packageVersion = Get-ValidNpmVersion -PackageName $package -Version $buildVersion
+        $packageWithVersion = "$package@$packageVersion"
         Write-Output "Installing $packageWithVersion..."
 
         npm install --save --save-exact --no-fund --loglevel=error --force $packageWithVersion
@@ -33,6 +34,42 @@ function Install-Packages {
     }
 
     Write-Output "`nAll packages installed successfully in $folderName"
+}
+
+function Get-ValidNpmVersion {
+    param (
+        [string]$PackageName,
+        [string]$Version
+    )
+
+    function Test-NpmVersionExists {
+        param ([string]$Pkg, [string]$Ver)
+        npm view "$Pkg@$Ver" > $null 2>&1
+        return ($LASTEXITCODE -eq 0)
+    }
+
+    Write-Host "Checking $PackageName@$Version..."
+    if (Test-NpmVersionExists -Pkg $PackageName -Ver $Version) {
+        Write-Host "$PackageName@$Version exists."
+        return $Version
+    }
+
+    try {
+        $v = [version]$Version
+        $fallback = "$($v.Major).$($v.Minor)-stable"
+    } catch {
+        Write-Host "Invalid version format: $Version"
+        return $null
+    }
+
+    Write-Host "$PackageName@$Version not found. Trying fallback: $PackageName@$fallback..."
+    if (Test-NpmVersionExists -Pkg $PackageName -Ver $fallback) {
+        Write-Host "$PackageName@$fallback exists (fallback)."
+        return $fallback
+    }
+
+    Write-Host "Neither $PackageName@$Version nor @$fallback exist."
+    return $null
 }
 
 function Build-Project {
