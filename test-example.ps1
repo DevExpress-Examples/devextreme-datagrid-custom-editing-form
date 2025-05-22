@@ -11,29 +11,10 @@ $global:BUILD_VERSION = $buildVersion
 $global:ERROR_CODE = 0
 $global:FAILED_PROJECTS = @()
 
-function Install-Packages {
-    param (
-        [string]$folderName,
-        [string[]]$packages,
-        [string]$buildVersion
-    )
-
-    Write-Output "`nInstalling packages in folder: $folderName"
-
-    # Loop through each package and install it individually
-    foreach ($package in $packages) {
-        $packageVersion = Get-ValidNpmVersion -PackageName $package -Version $buildVersion
-        $packageWithVersion = "$package@$packageVersion"
-        Write-Output "Installing $packageWithVersion..."
-
-        npm install --save --save-exact --no-fund --loglevel=error --force $packageWithVersion
-        if (-not $?) {
-            Write-Error "`nERROR: Failed to install $packageWithVersion in $folderName"
-            throw "Installation failed for $packageWithVersion in $folderName"
-        }
-    }
-
-    Write-Output "`nAll packages installed successfully in $folderName"
+function Test-NpmVersionExists {
+    param ([string]$Pkg, [string]$Ver)
+    npm view "$Pkg@$Ver" > $null 2>&1
+    return ($LASTEXITCODE -eq 0)
 }
 
 function Get-ValidNpmVersion {
@@ -41,12 +22,6 @@ function Get-ValidNpmVersion {
         [string]$PackageName,
         [string]$Version
     )
-
-    function Test-NpmVersionExists {
-        param ([string]$Pkg, [string]$Ver)
-        npm view "$Pkg@$Ver" > $null 2>&1
-        return ($LASTEXITCODE -eq 0)
-    }
 
     Write-Host "Checking $PackageName@$Version..."
     if (Test-NpmVersionExists -Pkg $PackageName -Ver $Version) {
@@ -72,12 +47,36 @@ function Get-ValidNpmVersion {
     return $null
 }
 
+function Install-Packages {
+    param (
+        [string]$folderName,
+        [string[]]$packages,
+        [string]$buildVersion
+    )
+
+    Write-Output "`nInstalling packages in folder: $folderName"
+
+    foreach ($package in $packages) {
+        $packageVersion = Get-ValidNpmVersion -PackageName $package -Version $buildVersion
+        $packageWithVersion = "$package@$packageVersion"
+        Write-Output "Installing $packageWithVersion..."
+
+        npm install --save --save-exact --no-fund --loglevel=error --force $packageWithVersion
+        if (-not $?) {
+            Write-Error "`nERROR: Failed to install $packageWithVersion in $folderName"
+            throw "Installation failed for $packageWithVersion in $folderName"
+        }
+    }
+
+    Write-Output "`nAll packages installed successfully in $folderName"
+}
+
 function Build-Project {
     param (
         [string]$folderName
     )
     Write-Output "`nBuilding the project in folder: $folderName"
-    
+
     npm run build
     if (-not $?) {
         Write-Error "`nERROR: Failed to build the project in $folderName"
@@ -99,7 +98,7 @@ function Process-JavaScriptProjects {
 
     $jQueryEntry = @{
         Name = "jQuery";
-        Packages = if ([version]$buildVersion -ge [version]23.1) { # `devextreme-dist` appeared in 23.1
+        Packages = if ([version]$buildVersion -ge [version]23.1) {
             @("devextreme", "devextreme-dist")
         } else {
             @("devextreme")
@@ -144,48 +143,132 @@ function Process-JavaScriptProjects {
     Write-Output "`n--== JavaScript Projects Processing Completed ==--"
 }
 
-function Process-DotNetProjects {
+function Resolve-NuGetVersionWithFallback {
     param (
-        [string]$RootDirectory = "."
+        [string]$PackageName,
+        [string]$RequestedVersion
     )
 
-    Write-Output "`n--== Starting .NET project processing in directory: $RootDirectory ==--"
-
-    $slnFiles = Get-ChildItem -Path $RootDirectory -Filter *.sln -Recurse -Depth 1
-
-    if ($slnFiles.Count -eq 0) {
-        Write-Output "`nNo solution files (.sln) found in the specified directory at level 1."
-        return
+    function Test-PackageAvailable {
+        param ([string]$name, [string]$ver)
+        dotnet add package $name --version $ver > $null 2>&1
+        return ($LASTEXITCODE -eq 0)
     }
 
-    foreach ($slnFile in $slnFiles) {
-        Write-Output "`nFound solution file: $($slnFile.FullName)"
-        
-        try {
-            Write-Output "`nBuilding solution: $($slnFile.FullName)"
-            dotnet build $slnFile.FullName -c Release
+    if (Test-PackageAvailable -name $PackageName -ver $RequestedVersion) {
+        Write-Host "$PackageName@$RequestedVersion is available."
+        return $RequestedVersion
+    }
 
-            if ($?) {
-                Write-Output "`nBuild succeeded for $($slnFile.FullName)."
-            } else {
-                throw "Build failed for $($slnFile.FullName)."
-            }
-        } catch {
-            Write-Error "`nERROR: $_"
-            $global:LASTEXITCODE = 1
-            $global:ERROR_CODE = 1
-            $global:FAILED_PROJECTS += "ASP.NET"
+    Write-Host "$PackageName@$RequestedVersion not found. Checking for -beta and -alpha versions..."
+
+    $suffixes = @("beta", "alpha")
+    foreach ($suffix in $suffixes) {
+        $fallbackVersion = "$RequestedVersion-$suffix"
+        if (Test-PackageAvailable -name $PackageName -ver $fallbackVersion) {
+            Write-Host "Found $PackageName@$fallbackVersion"
+            return $fallbackVersion
         }
     }
 
-    Write-Output "`nCompleted .NET project processing."
+    Write-Warning "No matching versions found for $PackageName@$RequestedVersion"
+    return $null
+}
+
+function Process-AspNetCoreProject {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$buildVersion
+    )
+
+    $folderPath = Get-ChildItem -Directory |
+        Where-Object { $_.Name -match '(?i)^ASP\.NET\s*Core$' } |
+        Select-Object -First 1 -ExpandProperty FullName
+
+    if (-not $folderPath) {
+        Write-Error "Directory matching 'ASP.NET Core' not found."
+        return
+    }
+
+    Write-Host "Found project directory: $folderPath"
+    Push-Location $folderPath
+
+    try {
+        $resolvedNugetVersion = Resolve-NuGetVersionWithFallback -PackageName "DevExtreme.AspNet.Core" -RequestedVersion $buildVersion
+        if (-not $resolvedNugetVersion) {
+            throw "No valid version found for DevExtreme.AspNet.Core"
+        }
+
+        Write-Host "Installing DevExtreme.AspNet.Core@$resolvedNugetVersion..."
+        dotnet add package DevExtreme.AspNet.Core --version $resolvedNugetVersion
+
+        $packageJsonPath = Get-ChildItem -Path $folderPath -Filter "package.json" -Recurse -File -ErrorAction SilentlyContinue |
+            Select-Object -First 1 -ExpandProperty FullName
+
+        if ($packageJsonPath) {
+            Write-Host "Found package.json: $packageJsonPath"
+
+            try {
+                $packageJson = Get-Content -Path $packageJsonPath -Raw | ConvertFrom-Json
+                $updated = $false
+
+                if ($packageJson.dependencies.devextreme) {
+                    $validDevextremeVersion = Get-ValidNpmVersion -PackageName "devextreme" -Version $buildVersion
+                    if ($validDevextremeVersion) {
+                        $packageJson.dependencies.devextreme = $validDevextremeVersion
+                        $updated = $true
+                    }
+                }
+
+                if ($packageJson.dependencies.'devextreme-dist') {
+                    $validDevextremeDistVersion = Get-ValidNpmVersion -PackageName "devextreme-dist" -Version $buildVersion
+                    if ($validDevextremeDistVersion) {
+                        $packageJson.dependencies.'devextreme-dist' = $validDevextremeDistVersion
+                        $updated = $true
+                    }
+                }
+
+                if ($updated) {
+                    $packageJson | ConvertTo-Json -Depth 10 | Set-Content -Path $packageJsonPath -Encoding UTF8
+                    Write-Host "Updated package.json with valid versions."
+                } else {
+                    Write-Host "No matching dependencies found in package.json to update."
+                }
+
+                Write-Host "Installing NPM dependencies..."
+                npm install --save --save-exact --no-fund --loglevel=error
+                if (-not $?) {
+                    throw "Failed to install npm dependencies"
+                }
+            } catch {
+                Write-Error "Failed to update package.json: $_"
+            }
+        } else {
+            Write-Warning "No package.json file found in '$folderPath'."
+        }
+
+        Write-Host "Running dotnet build..."
+        dotnet build
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "Build succeeded."
+        } else {
+            throw
+        }
+    } catch {
+        Write-Error "An error occurred: $_"
+        $global:LASTEXITCODE = 1
+        $global:ERROR_CODE = 1
+        $global:FAILED_PROJECTS += "ASP.NET Core"
+    } finally {
+        Pop-Location
+    }
 }
 
 function Write-BuildInfo {
-    $BUILD_VERSION = if ($global:BUILD_VERSION -ne $null -and $global:BUILD_VERSION -ne "") { 
-        $global:BUILD_VERSION 
-    } else { 
-        "(empty)" 
+    $BUILD_VERSION = if ($global:BUILD_VERSION -ne $null -and $global:BUILD_VERSION -ne "") {
+        $global:BUILD_VERSION
+    } else {
+        "(empty)"
     }
 
     Write-Output "Build Version: $BUILD_VERSION"
@@ -193,7 +276,7 @@ function Write-BuildInfo {
 
 Write-BuildInfo
 Process-JavaScriptProjects -buildVersion $global:BUILD_VERSION
-Process-DotNetProjects
+Process-AspNetCoreProject -buildVersion $global:BUILD_VERSION
 
 Write-Output "`nFinished testing version: $global:BUILD_VERSION. Error code: $global:ERROR_CODE"
 if ($global:ERROR_CODE -ne 0 -and $global:FAILED_PROJECTS.Count -gt 0) {

@@ -31,7 +31,7 @@ If you need to include more features, you can uncomment one of the following sec
 
 * Gantt - scripts and styles for [dxGantt](https://js.devexpress.com/DevExtreme/Guide/UI_Components/Gantt/Getting_Started_with_Gantt/).
 * Diagram - scripts and styles for [dxDiagram](https://js.devexpress.com/DevExtreme/Guide/UI_Components/Diagram/Getting_Started_with_Diagram/).
-* Export  - scripts and styles for the exporting feature: [Export Data to Excel](https://js.devexpress.com/DevExtreme/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/#Export_Data_to_Excel). 
+* Export  - scripts and styles for the exporting feature: [Export Data to Excel](https://js.devexpress.com/DevExtreme/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/#Export_Data). 
 * HtmlEditor - scripts and styles for [dxHtmlEditor](https://js.devexpress.com/DevExtreme/Guide/UI_Components/HtmlEditor/Overview/).
 * Full Bundle - scripts and styles for all above mentioned features/components.  
 
