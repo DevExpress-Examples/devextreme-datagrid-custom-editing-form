@@ -1,4 +1,4 @@
-# jQuery App
+# jQuery
 
 ## Installation
 

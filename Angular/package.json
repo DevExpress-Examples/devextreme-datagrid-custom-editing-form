@@ -1,12 +1,16 @@
 {
-  "name": "my-app",
+  "name": "angular-test",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint-html": "prettier --check .",
+    "lint-ts": "eslint --ext .ts .",
+    "lint-css": "stylelint src/**/*.{css,scss} --allow-empty-input",
+    "lint": "npm-run-all -p -c lint-ts lint-css lint-html"
   },
   "private": true,
   "dependencies": {
@@ -18,8 +22,8 @@
     "@angular/platform-browser": "^18.0.3",
     "@angular/platform-browser-dynamic": "^18.0.3",
     "@angular/router": "^18.0.3",
-    "devextreme": "^24.1.3",
-    "devextreme-angular": "^24.1.3",
+    "devextreme": "24.2.3",
+    "devextreme-angular": "24.2.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.7"

@@ -1,0 +1,6 @@
+{
+    "extends": [
+        "stylelint-config-standard-scss",
+        "eslint-config-devextreme/stylelintrc"
+    ]
+}

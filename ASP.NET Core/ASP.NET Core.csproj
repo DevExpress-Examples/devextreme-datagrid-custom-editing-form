@@ -18,8 +18,8 @@
     </Exec>
   </Target>
   <ItemGroup>
-    <PackageReference Include="DevExtreme.AspNet.Data" Version="4.*" />
-    <PackageReference Include="DevExtreme.AspNet.Core" Version="24.1.*" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="5.*" />
+    <PackageReference Include="DevExtreme.AspNet.Core" Version="24.2.*" />
   </ItemGroup>
 
   <ProjectExtensions>
