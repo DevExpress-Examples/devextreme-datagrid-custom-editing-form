@@ -1,9 +1,9 @@
 .demo-container {
-    margin: 50px 50px;
-    width: 90vh;
+    margin: 50px;
+    width: 90vw;
 }
 
-#helpedInfo {
+#help-info {
     color: #42a5f5;
 }
 
