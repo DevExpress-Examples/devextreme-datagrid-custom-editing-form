@@ -1,0 +1,159 @@
+@using ASP_NET_Core.Models
+@{
+    string[] positions = new string[] {"HR Manager", "IT Manager", "CEO", "Controller",
+        "Sales Manager", "Support Manager", "Shipping Manager", "Sales Assistant", "CMO"
+    };
+}
+<h2>Custom Edit Form</h2>
+
+@(
+Html.DevExtreme().DataGrid<Employee>()
+    .ID("grid")
+    .ShowBorders(true)
+    .DataSource(d => d.Mvc().Controller("SampleData").Key("ID")
+        .LoadAction("Get")
+        .DeleteAction("Delete")
+        .UpdateAction("Update")
+        .InsertAction("Add")
+    )
+    .ShowColumnLines(true)
+    .ShowRowLines(true)
+    .RepaintChangesOnly(true)
+    .Editing(editing => editing
+        .Mode(GridEditMode.Popup)
+        .AllowAdding(true)
+        .AllowDeleting(true)
+        .AllowUpdating(true)
+        .UseIcons(true)
+    )
+    .Columns(columns => {
+        columns.AddFor(m => m.FirstName);
+        columns.AddFor(m => m.LastName);
+        columns.AddFor(m => m.BirthDate);
+        columns.AddFor(m => m.Position).Width(170);
+        columns.AddFor(m => m.HireDate);
+        columns.AddFor(m => m.Address);
+        columns.Add().Type(GridCommandColumnType.Buttons).Buttons(buttons => {
+            buttons.Add().Name(GridColumnButtonName.Edit).OnClick("editClick");
+            buttons.Add().Name(GridColumnButtonName.Delete);
+        });
+    })
+    .Toolbar(toolbar => toolbar.Items(items => {
+        items.Add().Widget(w => w.Button().Icon("plus").OnClick("addClick"));
+    }))
+)
+
+@(Html.DevExtreme().Popup()
+    .ID("popup")
+    .DeferRendering(false)
+    .HideOnOutsideClick(true)
+    .Height("auto")
+    .ContentTemplate(new TemplateName("popup-template"))
+    .ToolbarItems(toolbar => {
+        toolbar.Add()
+            .Location(ToolbarItemLocation.After)
+            .Toolbar(Toolbar.Bottom)
+            .Widget(w => w.Button()
+                .Text("Confirm")
+                .Type(ButtonType.Success)
+                .OnClick("confirmClick")
+            );
+        toolbar.Add()
+            .Location(ToolbarItemLocation.After)
+            .Toolbar(Toolbar.Bottom)
+            .Widget(w => w.Button()
+                .Text("Cancel")
+                .Type(ButtonType.Success)
+                .OnClick("cancelClick")
+            );
+    })
+)
+@using (Html.DevExtreme().NamedTemplate("popup-template")) {
+    @(
+    Html.DevExtreme().Form<Employee>()
+        .ID("form")
+        .ShowColonAfterLabel(true)
+        .ValidationGroup(new JS("validationGroupName"))
+        .Items(items => {
+            items.AddGroup().ColCount(2).Items(group => {
+                group.AddSimpleFor(m => m.FirstName)
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'user')")));
+                group.AddSimpleFor(m => m.Position)
+                    .Editor(editor => editor.SelectBox().SearchEnabled(true).Items(positions))
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'info')")));
+                group.AddSimpleFor(m => m.LastName)
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'user')")));
+                group.AddSimpleFor(m => m.Address)
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'home')")));
+                group.AddSimpleFor(m => m.BirthDate)
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'event')")));
+                group.AddSimpleFor(m => m.HireDate)
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'event')")));
+                group.AddSimpleFor(m => m.Notes)
+                    .ColSpan(2)
+                    .Editor(editor => editor.TextArea().MaxLength(200).Height(90))
+                    .Label(label => label.Template(new TemplateName("notes-label-template")));
+                group.AddSimpleFor(m => m.Phone)
+                    .Editor(editor => editor.TextBox()
+                        .Mask("+1 (X00) 000-0000")
+                        .MaskRules(new JS("{ X: /[02-9]/ }"))
+                        .MaskInvalidMessage("The phone must have a correct USA phone format")
+                    )
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'tel')")));
+                group.AddSimpleFor(m => m.Email)
+                    .Label(label => label.Template(new JS("(data) => labelTemplate(data, 'email')")));
+            });
+        })
+    );
+}
+@using (Html.DevExtreme().NamedTemplate("notes-label-template")) {
+    <div id="template-content">
+        <i id="helpedInfo" class="dx-icon dx-icon-info"></i>
+        Additional<br><%- text %>
+    </div>
+    @(Html.DevExtreme().Tooltip()
+        .ShowEvent("mouseenter")
+        .HideEvent("mouseleave")
+        .Target("#helpedInfo")
+        .ContentTemplate(@<text>
+            <div id="tooltip-content">This field must not exceed 200 characters</div>
+        </text>)
+    )
+}
+<script>
+    const validationGroupName = "gridForm";
+    let isNewRecord = false;
+    function labelTemplate(data, iconName) {
+        return (`<div><i class="dx-icon dx-icon-${iconName}"></i>${data.text}</div>`);
+    }
+    function editClick(e) {
+        showPopup(false, { ...e.row.data });
+    }
+    function addClick() {
+        showPopup(true, {});
+    }
+    function showPopup(isAdding, data) {
+        isNewRecord = isAdding;
+        const form = $("#form").dxForm("instance");
+        form.option("formData", data);
+        const popup = $("#popup").dxPopup("instance");
+        popup.option("title", isNewRecord ? "Add" : "Edit");
+        popup.show();
+    }
+    function confirmClick() {
+        let result = DevExpress.validationEngine.validateGroup(validationGroupName);
+        if (!result.isValid)
+            return;
+        const data = $("#form").dxForm("option", "formData");
+        const grid = $("#grid").dxDataGrid("instance");
+        const gridStore = grid.getDataSource().store();
+        if (isNewRecord)
+            gridStore.insert(data).then(() => grid.refresh());
+        else
+            gridStore.update(data["ID"], data).then(() => grid.refresh());
+        $("#popup").dxPopup("hide");
+    }
+    function cancelClick() {
+        $("#popup").dxPopup("hide");
+    }
+</script>
