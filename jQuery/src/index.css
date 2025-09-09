@@ -1,4 +1,17 @@
 .demo-container {
     margin: 50px;
-    width: 90vw;
+    width: 90vh;
+}
+
+#helped-info {
+    color: #42a5f5;
+}
+
+#tooltip-content {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#template-content {
+    display: inline-flex;
 }

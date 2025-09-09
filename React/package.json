@@ -20,6 +20,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.4.3",
@@ -27,7 +28,6 @@
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.4.1",
     "@vitest/coverage-v8": "^1.5.0",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "^8.35.0",
     "eslint-config-devextreme": "^1.1.4",
     "eslint-plugin-no-only-tests": "2.6.0",
@@ -39,10 +39,10 @@
     "npm-run-all": "^4.1.5",
     "stylelint": "^15.6.1",
     "stylelint-config-standard": "^33.0.0",
+    "ts-node": "10.9.2",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.3.5",
-    "ts-node": "10.9.2",
     "vitest": "^1.5.0"
   }
 }
