@@ -24,7 +24,7 @@ Implement a DataGrid callback function that displays the Popup when a user click
 - **Vue**
     - [App.vue](Vue/src/App.vue)
 - **React**
-    - [App.js](React/src/App.js)
+    - [App.tsx](React/src/App.tsx)
 - **ASP.NET Core**
     - [Index.cshtml](ASP.NET%20Core/Views/Home/Index.cshtml)
 
