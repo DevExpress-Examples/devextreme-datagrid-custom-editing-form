@@ -2,3 +2,7 @@
   margin: 50px;
   width: 90vw;
 }
+
+::ng-deep .dx-scrollview-bottom-pocket {
+    display: none;
+}
