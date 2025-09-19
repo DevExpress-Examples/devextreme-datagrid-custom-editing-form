@@ -31,7 +31,7 @@ Implement a DataGrid callback function that displays the Popup when a user click
 ## Documentation
 
 - [Getting Started with DataGrid](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/)
-- [DataGrid Popup Mode](https://js.devexpress.com/Documentation/Guide/UI_Components/DataGrid/Editing/#User_Interaction/Popup_Mode)
+- [DataGrid Popup Mode](https://js.devexpress.com/jQuery/Documentation/Guide/UI_Components/DataGrid/Editing/#User_Interaction/Popup_Mode)
 - [DataGrid - API Reference](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxDataGrid/)
 - [Popup - API Reference](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxPopup/)
 - [Form - API Reference](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxForm/)
