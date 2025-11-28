@@ -10,6 +10,7 @@ module.exports = {
     },
     parserOptions: {
       project: './tsconfig.json',
+      tsconfigRootDir: __dirname,
       'createDefaultProgram': true,
       ecmaVersion: 2022,
       sourceType: 'module',

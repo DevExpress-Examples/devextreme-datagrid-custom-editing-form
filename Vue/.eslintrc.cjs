@@ -10,6 +10,7 @@ module.exports = {
     env: { es6: true },
     parserOptions: {
       project: './tsconfig.json',
+      tsconfigRootDir: __dirname,
       'createDefaultProgram': true,
       'ecmaVersion': 2020,
     },
