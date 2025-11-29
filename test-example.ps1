@@ -229,7 +229,11 @@ function Process-AspNetCoreProject {
                 }
 
                 if ($updated) {
-                    $packageJson | ConvertTo-Json -Depth 10 | Set-Content -Path $packageJsonPath -Encoding UTF8
+                    $tempJsonPath = [System.IO.Path]::GetTempFileName()
+                    $jsonContent = $packageJson | ConvertTo-Json -Depth 10
+                    [System.IO.File]::WriteAllText($tempJsonPath, $jsonContent, [System.Text.UTF8Encoding]::new($false))
+                    node -e "const fs = require('fs'); const data = fs.readFileSync('$($tempJsonPath -replace '\\', '/')', 'utf8'); fs.writeFileSync('$($packageJsonPath -replace '\\', '/')', data, 'utf8');"
+                    Remove-Item $tempJsonPath -ErrorAction SilentlyContinue
                     Write-Host "Updated package.json with valid versions."
                 } else {
                     Write-Host "No matching dependencies found in package.json to update."
