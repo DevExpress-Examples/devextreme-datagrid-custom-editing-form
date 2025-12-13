@@ -34,7 +34,7 @@
     "@angular/compiler-cli": "^18.0.3",
     "@types/jasmine": "~4.3.0",
     "eslint": "^8.39.0",
-    "eslint-config-devextreme": "^1.1.4",
+    "eslint-config-devextreme": "1.1.4",
     "eslint-plugin-no-only-tests": "^3.1.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",

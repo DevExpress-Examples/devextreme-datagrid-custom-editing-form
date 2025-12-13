@@ -29,7 +29,7 @@
     "@vitejs/plugin-react": "^4.4.1",
     "@vitest/coverage-v8": "^1.5.0",
     "eslint": "^8.35.0",
-    "eslint-config-devextreme": "^1.1.4",
+    "eslint-config-devextreme": "1.1.4",
     "eslint-plugin-no-only-tests": "2.6.0",
     "eslint-plugin-react": "7.31.10",
     "eslint-plugin-react-hooks": "^5.2.0",
