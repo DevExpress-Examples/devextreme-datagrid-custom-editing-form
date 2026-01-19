@@ -1,4 +1,4 @@
-import spellCheck from 'eslint-config-devextreme/spellCheck';
+import spellCheck from 'eslint-config-devextreme/spell-check';
 import angularConfig from 'eslint-config-devextreme/angular';
 import tsParser from '@typescript-eslint/parser';
 import path from 'path';

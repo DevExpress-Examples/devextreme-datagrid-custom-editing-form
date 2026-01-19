@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import tsParser from '@typescript-eslint/parser';
-import spellCheck from 'eslint-config-devextreme/spellCheck';
+import spellCheck from 'eslint-config-devextreme/spell-check';
 import reactConfig from 'eslint-config-devextreme/react';
 
 const __filename = fileURLToPath(import.meta.url);
