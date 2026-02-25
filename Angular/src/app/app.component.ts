@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { ClickEvent } from 'devextreme/ui/button';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
   title = 'Angular';
