@@ -7,4 +7,9 @@ export default [
   },
   ...spellCheck,
   ...jqueryConfig,
+  {
+    rules: {
+      'no-unused-vars': 'off',
+    },
+  },
 ];
