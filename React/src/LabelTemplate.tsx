@@ -3,7 +3,6 @@ interface LabelTemplateData {
   text?: string;
 }
 
-// eslint-disable-next-line no-unused-vars
 function LabelTemplate(iconName: string): (data: LabelTemplateData) => JSX.Element {
   function Template(data: LabelTemplateData): JSX.Element {
     return (
