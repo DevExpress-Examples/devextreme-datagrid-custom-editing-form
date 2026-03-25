@@ -13,9 +13,9 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "devextreme": "^25.2.3",
+    "devextreme": "25.2.3",
     "devextreme-dist": "^25.2.3",
-    "devextreme-vue": "^25.2.3",
+    "devextreme-vue": "25.2.3",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

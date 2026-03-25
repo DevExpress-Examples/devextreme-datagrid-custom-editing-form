@@ -16,6 +16,7 @@ export default [
   {
     rules: {
       'import/prefer-default-export': 'off',
+      'import/extensions': 'off',
     },
   },
   {

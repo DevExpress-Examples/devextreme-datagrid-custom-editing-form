@@ -68,7 +68,6 @@ function App(): JSX.Element {
     setPopupState({ isNewRecord: isNew, formData: data, visible: true });
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/space-before-function-paren, space-before-function-paren
   const confirmChanges = useCallback(async () => {
     const result = validationEngine.validateGroup(validationGroupName);
     if (!result.isValid) return;
@@ -84,7 +83,7 @@ function App(): JSX.Element {
         await instance.refresh(true);
       }
       notify(isNewRecord ? 'Employee added' : 'Employee updated', 'success', 2000);
-    } catch (err) {
+    } catch {
       notify('Save failed', 'error', 3000);
     } finally {
       hidePopup();
