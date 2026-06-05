@@ -7,10 +7,5 @@
     "devextreme-dist": "25.2.3",
     "devextreme-aspnet-data": "^5.1.0",
     "bootstrap": "^5.3.7"
-  },
-  "devDependencies": {
-    "gulp": "4.0.2",
-    "gulp-concat": "2.6.1",
-    "rimraf": "5.0.7"
   }
 }
