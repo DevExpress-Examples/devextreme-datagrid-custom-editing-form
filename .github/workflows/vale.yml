@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: clone repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: clone vale-styles repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: DevExpress/vale-styles
           path: vale-styles
