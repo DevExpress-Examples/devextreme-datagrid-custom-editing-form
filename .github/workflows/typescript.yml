@@ -84,6 +84,10 @@ jobs:
       working-directory: Vue
       run: npm install --no-audit --no-fund
 
+    - name: Generate license file
+      working-directory: Vue
+      run: npm run prebuild
+
     - name: TSC Vue
       working-directory: Vue
       run: npm run type-check
