@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "npm run lite",
+    "prebuild": "devextreme-license --non-modular --out src/devextreme-license.js --force",
     "build": "npm run lint",
     "lite": "lite-server -c ./bs-config.json",
     "lint-html": "prettier --check src/*",

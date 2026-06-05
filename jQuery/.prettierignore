@@ -1,3 +1,4 @@
 *.js
 *.css
 .github
+src/devextreme-license.ts
