@@ -1,3 +1,8 @@
+import config from 'devextreme/core/config';
+import { licenseKey } from './devextreme-license';
+
+config({ licenseKey });
+
 import { provideZoneChangeDetection } from "@angular/core";
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 

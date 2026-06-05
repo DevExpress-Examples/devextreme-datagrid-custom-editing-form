@@ -13,6 +13,7 @@ export default [
   },
   ...spellCheck,
   ...angularConfig,
+
   {
     files: ['**/*.ts'],
     languageOptions: {

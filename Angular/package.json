@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "devextreme-license --out src/devextreme-license.ts --force",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
