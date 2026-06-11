@@ -64,7 +64,7 @@
       :title="isNewRecord ? 'Add' : 'Edit'"
       height="auto"
       :close-on-outside-click="true"
-      :visible.sync="visible"
+      v-model:visible="visible"
     >
       <DxToolbarItem
         widget="dxButton"
@@ -88,7 +88,7 @@
 
       <DxForm
         :validation-group="validationGroupName"
-        :form-data.sync="formData"
+        v-model:form-data="formData"
       >
         <DxGroupItem
           :col-count="2"
