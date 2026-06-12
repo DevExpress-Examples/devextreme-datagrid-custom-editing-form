@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "devextreme": "26.1.2-beta",
-    "devextreme-dist": "26.1.2-beta",
     "devextreme-vue": "26.1.2-beta",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
