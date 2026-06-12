@@ -45,7 +45,7 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="DevExtreme.AspNet.Core" Version="26.1.2-beta" />
+    <PackageReference Include="DevExtreme.AspNet.Core" Version="26.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

@@ -24,8 +24,8 @@
     "stylelint-config-standard": "^33.0.0"
   },
   "dependencies": {
-    "devextreme": "26.1.2-beta",
-    "devextreme-dist": "26.1.2-beta",
+    "devextreme": "26.1.3",
+    "devextreme-dist": "26.1.3",
     "jquery": "^3.7.1"
   }
 }
