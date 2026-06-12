@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 
 import validationEngine from 'devextreme/ui/validation_engine';
@@ -17,6 +17,7 @@ interface PositionEditorOptions {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   providers: [Employee, Service],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 
