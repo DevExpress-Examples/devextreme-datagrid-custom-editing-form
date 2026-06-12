@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "npm run lite",
+    "start": "vite",
     "prebuild": "devextreme-license --non-modular --out src/devextreme-license.js --force",
     "build": "npm run lint",
-    "lite": "lite-server -c ./bs-config.json",
     "lint-html": "prettier --check src/*",
     "lint-js": "eslint .",
     "lint-css": "stylelint src/**/*.css --allow-empty-input",
@@ -19,16 +18,14 @@
     "eslint-config-devextreme": "1.1.9",
     "eslint-plugin-no-only-tests": "^3.1.0",
     "htmlhint": "^1.1.4",
-    "lite-server": "^2.6.1",
     "npm-run-all": "^4.1.5",
     "prettier": "2.8.8",
     "stylelint": "^15.6.1",
     "stylelint-config-standard": "^33.0.0"
   },
   "dependencies": {
-    "browser-sync": "^3.0.2",
-    "devextreme": "25.2.3",
-    "devextreme-dist": "25.2.3",
+    "devextreme": "26.1.2-beta",
+    "devextreme-dist": "26.1.2-beta",
     "jquery": "^3.7.1"
   }
 }

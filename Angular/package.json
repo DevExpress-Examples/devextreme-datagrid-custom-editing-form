@@ -24,9 +24,9 @@
     "@angular/platform-browser": "^21.1.4",
     "@angular/platform-browser-dynamic": "^21.1.4",
     "@angular/router": "^21.1.4",
-    "devextreme": "25.2.3",
-    "devextreme-angular": "25.2.3",
-    "devextreme-dist": "^25.2.3",
+    "devextreme": "26.1.2-beta",
+    "devextreme-angular": "26.1.2-beta",
+    "devextreme-dist": "26.1.2-beta",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"

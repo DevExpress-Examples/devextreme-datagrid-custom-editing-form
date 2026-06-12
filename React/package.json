@@ -15,8 +15,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "devextreme": "25.2.3",
-    "devextreme-react": "25.2.3",
+    "devextreme": "26.1.2-beta",
+    "devextreme-react": "26.1.2-beta",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
